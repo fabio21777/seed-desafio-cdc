@@ -26,7 +26,7 @@ public class LivrariaCreateControllersTest {
     public void testCriarAutorComSucesso() {
         AutorCreateRequest request = new AutorCreateRequest(
                 "Jorge Amado",
-                "jorge@exemplo.com",
+                "jorge"+uuid() +"@exemplo.com",
                 "Autor brasileiro de renome"
         );
 
@@ -38,7 +38,7 @@ public class LivrariaCreateControllersTest {
                 .then()
                 .statusCode(HttpStatus.CREATED.getCode())
                 .body("name", equalTo("Jorge Amado"))
-                .body("email", equalTo("jorge@exemplo.com"))
+                .body("email", equalTo(request.email()))
                 .body("description", equalTo("Autor brasileiro de renome"))
                 .body("createdAt", notNullValue());
     }
@@ -121,7 +121,7 @@ public class LivrariaCreateControllersTest {
     public void testDescricaoPodeSerNula() {
         AutorCreateRequest request = new AutorCreateRequest(
                 "Jorge Amado",
-                "jorge@exemplo.com",
+                "jorge"+uuid() +"@exemplo.com",
                 ""  // Descrição ser vazia
         );
 
@@ -132,5 +132,47 @@ public class LivrariaCreateControllersTest {
                 .post("/api/v1/livraria")
                 .then()
                 .statusCode(HttpStatus.CREATED.getCode());
+    }
+
+    @Test
+    public void testEmailNaoPodeSerDuplicado() {
+        // Primeiro, cria um autor com um email específico
+        String email = "autor.teste" + uuid() + "@exemplo.com";
+
+        AutorCreateRequest primeiroAutor = new AutorCreateRequest(
+                "Primeiro Autor",
+                email,
+                "Descrição do primeiro autor"
+        );
+
+        // Cria o primeiro autor
+        spec
+                .when()
+                .body(primeiroAutor)
+                .contentType("application/json")
+                .post("/api/v1/livraria")
+                .then()
+                .statusCode(HttpStatus.CREATED.getCode());
+
+        // Tenta criar outro autor com o mesmo email
+        AutorCreateRequest segundoAutor = new AutorCreateRequest(
+                "Segundo Autor",
+                email,  // Mesmo email do primeiro autor
+                "Descrição do segundo autor"
+        );
+
+        // Verifica se a criação falha com um erro de email duplicado
+        spec
+                .when()
+                .body(segundoAutor)
+                .contentType("application/json")
+                .post("/api/v1/livraria")
+                .then()
+                .statusCode(HttpStatus.UNPROCESSABLE_ENTITY.getCode())
+                .body("message", containsString("Email já cadastrado"));
+    }
+
+    private String  uuid(){
+        return java.util.UUID.randomUUID().toString();
     }
 }

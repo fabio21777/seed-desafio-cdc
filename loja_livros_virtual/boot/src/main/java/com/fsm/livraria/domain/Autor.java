@@ -1,6 +1,7 @@
 package com.fsm.livraria.domain;
 
 import com.fsm.base.model.BaseDomain;
+import com.fsm.livraria.validation.NotDuplicateEmail;
 import io.micronaut.data.annotation.MappedEntity;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;

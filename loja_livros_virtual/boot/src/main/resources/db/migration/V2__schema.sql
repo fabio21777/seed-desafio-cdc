@@ -6,7 +6,8 @@ CREATE TABLE autor (
     email varchar(255) NOT NULL,
     descricao varchar(400));
 
-    --adicionar constrains e index para uuid,
+    --adicionar constrains e index para uuid,email é unique
 
 CREATE UNIQUE INDEX idx_autor_uuid ON autor (uuid);
+CREATE UNIQUE INDEX idx_autor_email ON autor (email);
 CREATE INDEX idx_autor_nome ON autor (nome);
