@@ -1,6 +1,6 @@
 package com.fsm.livraria.dto;
 
-import com.fsm.livraria.validation.NotDuplicateEmail;
+import com.fsm.livraria.validation.autor.NotDuplicateEmail;
 import io.micronaut.core.annotation.ReflectiveAccess;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.validation.constraints.Email;

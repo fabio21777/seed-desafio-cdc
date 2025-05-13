@@ -1,4 +1,4 @@
-package com.fsm.livraria.validation;
+package com.fsm.livraria.validation.autor;
 
 import com.fsm.livraria.repositories.AutorRepository;
 import io.micronaut.core.annotation.Nullable;

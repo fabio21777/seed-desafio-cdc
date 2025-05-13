@@ -1,4 +1,4 @@
-package com.fsm.livraria.validation;
+package com.fsm.livraria.validation.autor;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
