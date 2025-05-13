@@ -1,0 +1,6 @@
+applicationType: default
+defaultPackage: com.fsm
+testFramework: junit
+sourceLanguage: java
+buildTool: maven
+features: [app-name, cache-caffeine, data, data-jdbc, flyway, http-client-test, jackson-xml, java, java-application, jdbc-hikari, junit, logback, management, maven, maven-enforcer-plugin, micronaut-aot, micronaut-http-validation, micronaut-test-rest-assured, netty-server, postgres, readme, security-annotations, security-jwt, serialization-jackson, shade, static-resources, test-resources, validation, yaml, yaml-build]

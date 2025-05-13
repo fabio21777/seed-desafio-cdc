@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  db:
+    build: ./docker/postgresql
+    container_name: fsm_database
+    ports:
+      - 5439:5432

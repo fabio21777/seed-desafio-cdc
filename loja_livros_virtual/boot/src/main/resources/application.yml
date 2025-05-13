@@ -1,0 +1,30 @@
+micronaut:
+  application:
+    name: boot
+  security:
+    authentication: bearer
+    token:
+      jwt:
+        signatures:
+          secret:
+            generator:
+              secret: ${JWT_GENERATOR_SIGNATURE_SECRET:pleaseChangeThisSecretForANewOne}
+        generator:
+          refresh-token:
+            enabled: true
+            secret: ${JWT_GENERATOR_SIGNATURE_SECRET:pleaseChangeThisSecretForANewOne}
+          access-token:
+            expiration:  ${JWT_GENERATOR_ACCESS_TOKEN_EXPIRATION:PT24H}
+datasources:
+  default:
+    driver-class-name: org.postgresql.Driver
+    db-type: postgres
+    dialect: POSTGRES
+    url: ${DB_URL:`jdbc:postgresql://localhost:5439/fsm`}
+    password: ${DB_PASSWORD:fsm}
+    username: ${DB_USERNAME:fsm}
+
+flyway:
+  datasources:
+    default:
+      enabled: true

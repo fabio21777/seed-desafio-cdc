@@ -1,0 +1,24 @@
+meta {
+  name: create-user
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:8080/user
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJib290Iiwic3ViIjoiYWRtaW4iLCJuYmYiOjE3NDcxNDM4NTEsImV4cCI6MTc0NzE0NzQ1MSwiaWF0IjoxNzQ3MTQzODUxLCJyb2xlcyI6WyJST0xFX0FETUlOIl19.SuGl76NDxRsbIs0MmqBI2WhSeI_lIhAAXnds2BUmsjs
+}
+
+body:json {
+  {
+    "username": "",
+    "password": "",
+    "roles": [
+    ]
+  }
+}

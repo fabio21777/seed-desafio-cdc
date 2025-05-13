@@ -1,0 +1,14 @@
+package com.fsm.livraria.repositories;
+
+
+import com.fsm.livraria.domain.Autor;
+import io.micronaut.data.jdbc.annotation.JdbcRepository;
+import io.micronaut.data.model.query.builder.sql.Dialect;
+import io.micronaut.data.repository.CrudRepository;
+import jakarta.validation.constraints.NotNull;
+
+@JdbcRepository(dialect = Dialect.POSTGRES)
+public interface AutorRepository extends CrudRepository<Autor, Long> {
+
+    Autor save(@NotNull String nome, @NotNull String email, @NotNull String descricao);
+}
