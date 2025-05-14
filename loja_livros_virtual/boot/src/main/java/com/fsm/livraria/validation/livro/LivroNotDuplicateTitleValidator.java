@@ -1,12 +1,10 @@
-package com.fsm.livraria.validation.Livro;
+package com.fsm.livraria.validation.livro;
 
 import com.fsm.livraria.dto.LivroCreateRequestDto;
 import com.fsm.livraria.repositories.LivroRepository;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.validation.validator.constraints.ConstraintValidator;
 import jakarta.inject.Singleton;
-
-import java.util.UUID;
 
 @Factory
 class LivroNotDuplicateTitleValidator {

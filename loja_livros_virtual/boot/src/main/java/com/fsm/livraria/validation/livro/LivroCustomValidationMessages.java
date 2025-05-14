@@ -1,4 +1,4 @@
-package com.fsm.livraria.validation.Livro;
+package com.fsm.livraria.validation.livro;
 
 import io.micronaut.context.StaticMessageSource;
 import jakarta.inject.Singleton;

@@ -1,4 +1,4 @@
-package com.fsm.livraria.validation.Livro;
+package com.fsm.livraria.validation.livro;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
@@ -6,17 +6,17 @@ import jakarta.validation.Payload;
 import java.lang.annotation.*;
 
 /**
- * A anotação indica que o título não deve existir duplicado no banco de dados.
+ * A anotação indica que o ISBN não deve existir duplicado no banco de dados.
  * Durante uma operação de atualização, ignorará a entidade atual sendo atualizada.
  */
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.PARAMETER, ElementType.TYPE_USE})
 @Retention(RetentionPolicy.RUNTIME)
-@Repeatable(LivroNotDuplicateTitle.List.class)
+@Repeatable(LivroNotDuplicateIsbn.List.class)
 @Documented
 @Constraint(validatedBy = {})
-public @interface LivroNotDuplicateTitle {
+public @interface LivroNotDuplicateIsbn {
 
-    String MESSAGE = "micronaut.NotDuplicateTitle.message";
+    String MESSAGE = "micronaut.NotDuplicateIsbn.message";
 
     /**
      * @return message A mensagem de erro
@@ -41,8 +41,8 @@ public @interface LivroNotDuplicateTitle {
     @Documented
     @interface List {
         /**
-         * @return Um array de NotDuplicateTitle.
+         * @return Um array de NotDuplicateIsbn.
          */
-        LivroNotDuplicateTitle[] value();
+        LivroNotDuplicateIsbn[] value();
     }
 }

@@ -13,6 +13,8 @@ import io.micronaut.http.annotation.Post;
 import io.micronaut.security.annotation.Secured;
 import jakarta.validation.Valid;
 
+import java.security.Principal;
+
 @Controller
 @Secured("ROLE_ADMIN")
 public class LivroController {
@@ -30,7 +32,7 @@ public class LivroController {
     }
 
     @Post("api/v1/livros")
-    public HttpResponse<LivroDTO> create(@Body @Valid LivroCreateRequestDto request) {
+    public HttpResponse<LivroDTO> create(@Body @Valid LivroCreateRequestDto request, Principal principal) {
         Livro livro = livroRepository.save(request.toEntity(autorRepository,
                 categoriaRepository));
         return HttpResponse.created(new LivroDTO(livro));
