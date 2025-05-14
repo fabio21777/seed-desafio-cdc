@@ -13,6 +13,10 @@ public class Categoria extends BaseDomain {
     public Categoria() {
     }
 
+    public Categoria(String nome) {
+        this.nome = nome;
+    }
+
     public String getNome() {
         return nome;
     }

@@ -19,4 +19,6 @@ public interface AutorRepository extends CrudRepository<Autor, Long> {
     boolean existsByEmail(String email);
 
     Optional<Autor> findByEmail(String email);
+
+    Optional<Autor> findByUuid(UUID uuid);
 }

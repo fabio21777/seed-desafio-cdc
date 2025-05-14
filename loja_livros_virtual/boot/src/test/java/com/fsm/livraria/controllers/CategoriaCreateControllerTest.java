@@ -23,6 +23,9 @@ public class CategoriaCreateControllerTest {
 
     @BeforeEach
     public void setup() {
+        if (token != null) {
+            return;
+        }
         this.token = spec
                 .given()
                 .contentType("application/json")

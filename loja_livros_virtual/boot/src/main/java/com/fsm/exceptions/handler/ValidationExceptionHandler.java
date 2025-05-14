@@ -11,6 +11,8 @@ import io.micronaut.http.annotation.Produces;
 import io.micronaut.http.server.exceptions.ExceptionHandler;
 import jakarta.inject.Singleton;
 import jakarta.validation.ConstraintViolationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
 
@@ -19,6 +21,8 @@ import java.time.Instant;
 @Produces
 @Primary
 public class ValidationExceptionHandler implements ExceptionHandler<ConstraintViolationException, HttpResponse<ValidateError>>{
+
+    private static final Logger logger = LoggerFactory.getLogger(ValidationExceptionHandler.class);
 
     @Override
     public HttpResponse<ValidateError> handle(HttpRequest request, ConstraintViolationException exception) {
@@ -37,6 +41,8 @@ public class ValidationExceptionHandler implements ExceptionHandler<ConstraintVi
 
             err.addFieldMessage(fieldName, violation.getMessage());
         });
+
+        logger.error("Validation error: {}", err.getMessage());
 
         return HttpResponse.status(status)
                 .body(err);

@@ -14,4 +14,5 @@ public interface CategoriaRepository extends CrudRepository<Categoria, Long> {
     boolean existsByNomeAndUuidNot(String nome, UUID uuid);
     boolean existsByNome(String nome);
     Optional<Categoria> findByNome(String nome);
+    Optional<Categoria> findByUuid(UUID uuid);
 }

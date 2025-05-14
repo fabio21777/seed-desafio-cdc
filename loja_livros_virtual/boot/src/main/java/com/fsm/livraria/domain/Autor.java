@@ -23,6 +23,20 @@ public class Autor extends BaseDomain {
     public Autor () {
     }
 
+    /**
+     * Construtor para criar um autor com email, nome e descrição.
+     *
+     * @param email     O email do autor.
+     * @param nome      O nome do autor.
+     * @param descricao A descrição do autor.
+     */
+
+    public Autor(String email, String nome, String descricao) {
+        this.email = email;
+        this.nome = nome;
+        this.descricao = descricao;
+    }
+
     public String getEmail() {
         return email;
     }
