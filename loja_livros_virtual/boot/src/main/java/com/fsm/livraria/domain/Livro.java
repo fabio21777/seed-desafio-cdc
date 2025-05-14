@@ -3,6 +3,10 @@ package com.fsm.livraria.domain;
 import com.fsm.base.model.BaseDomain;
 import io.micronaut.data.annotation.MappedEntity;
 import io.micronaut.data.annotation.Relation;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import org.checkerframework.checker.units.qual.min;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -30,7 +34,7 @@ public class Livro extends BaseDomain {
     @Relation(value = Relation.Kind.MANY_TO_ONE)
     private Autor autor;
 
-    public Livro(String titulo, String resumo, String sumario, BigDecimal preco, Integer numeroPaginas, String isbn, LocalDateTime publicacao, Categoria categoria, Autor autor) {
+    public Livro(@NotBlank String titulo, @NotBlank String resumo, String sumario, @Min(value = 20) BigDecimal preco, @Min(value = 100) Integer numeroPaginas, @NotBlank String isbn, @NotBlank LocalDateTime publicacao, @NotNull Categoria categoria, @NotNull Autor autor) {
         this.titulo = titulo;
         this.resumo = resumo;
         this.sumario = sumario;
