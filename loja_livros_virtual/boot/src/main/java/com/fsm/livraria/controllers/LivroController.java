@@ -3,13 +3,14 @@ package com.fsm.livraria.controllers;
 import com.fsm.livraria.domain.Livro;
 import com.fsm.livraria.dto.LivroCreateRequestDto;
 import com.fsm.livraria.dto.LivroDTO;
+import com.fsm.livraria.dto.LivroList;
 import com.fsm.livraria.repositories.AutorRepository;
 import com.fsm.livraria.repositories.CategoriaRepository;
 import com.fsm.livraria.repositories.LivroRepository;
+import io.micronaut.data.model.Page;
+import io.micronaut.data.model.Pageable;
 import io.micronaut.http.HttpResponse;
-import io.micronaut.http.annotation.Body;
-import io.micronaut.http.annotation.Controller;
-import io.micronaut.http.annotation.Post;
+import io.micronaut.http.annotation.*;
 import io.micronaut.security.annotation.Secured;
 import jakarta.validation.Valid;
 
@@ -37,5 +38,12 @@ public class LivroController {
                 categoriaRepository));
         return HttpResponse.created(new LivroDTO(livro));
     }
+
+    @Get("api/v1/livros")
+    public HttpResponse<Page<LivroList>> list(@Valid Pageable page) {
+        Page<LivroList> livros = livroRepository.findAllLivros(page);
+        return HttpResponse.ok(livros);
+    }
+
 }
 

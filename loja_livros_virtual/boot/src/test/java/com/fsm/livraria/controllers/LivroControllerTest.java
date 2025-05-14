@@ -15,9 +15,12 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import static com.fsm.livraria.controllers.UtilsTest.uuid;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @MicronautTest
@@ -381,4 +384,176 @@ class LivroControllerTest {
         String responseBody = response.getBody().asString();
         assertTrue(responseBody.contains("O autor é obrigatório"));
     }
+    @Test
+    @DisplayName("Deve retornar os detalhes dos livro cadastrado e deve ter paginação")
+    void testListarLivros() {
+        // Primeiro, cadastramos um livro válido
+        LivroCreateRequestDto livro1 = criarLivroValido();
+
+        spec
+                .given()
+                .contentType("application/json")
+                .header("Authorization", "Bearer " + token)
+                .body(livro1)
+                .when()
+                .post("api/v1/livros")
+                .then()
+                .statusCode(201);
+
+        // Agora tentamos listar os livros cadastrados
+        spec
+                .given()
+                .contentType("application/json")
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .get("api/v1/livros")
+                .then()
+                .statusCode(200)
+                .extract()
+                .response();
+    }
+
+    @Test
+    @DisplayName("Deve retornar os livros cadastrados com paginação padrão")
+    void testListarLivrosComPaginacaoPadrao() {
+        // Cadastrar livros de teste
+        List<LivroCreateRequestDto> livrosCadastrados = cadastrarNLivros(5, uuid());
+
+        // Consultar sem especificar parâmetros de paginação (usa valores padrão)
+        var response = spec
+                .given()
+                .contentType("application/json")
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .get("api/v1/livros")
+                .then()
+                .statusCode(200)
+                .body("content", hasSize(greaterThanOrEqualTo(5)))
+                .body("content[0].title", notNullValue())
+                .body("content[0].uuid", notNullValue())
+                .body("totalSize", greaterThanOrEqualTo(5))
+                .extract()
+                .response();
+    }
+
+    @Test
+    @DisplayName("Deve retornar livros com paginação personalizada")
+    void testListarLivrosComPaginacaoPersonalizada() {
+        // Cadastrar livros de teste
+        cadastrarNLivros(10, uuid());
+
+        // Listar com tamanho de página 3
+        spec
+                .given()
+                .contentType("application/json")
+                .header("Authorization", "Bearer " + token)
+                .queryParam("size", 3)
+                .queryParam("page", 0)
+                .when()
+                .get("api/v1/livros")
+                .then()
+                .statusCode(200)
+                .body("content", hasSize(3))
+                .extract()
+                .response();
+
+        // Agora vamos para a página 1 (segunda página)
+        spec
+                .given()
+                .contentType("application/json")
+                .header("Authorization", "Bearer " + token)
+                .queryParam("size", 3)
+                .queryParam("page", 1)
+                .when()
+                .get("api/v1/livros")
+                .then()
+                .statusCode(200)
+                .body("content", hasSize(3));
+    }
+
+    @Test
+    @DisplayName("Deve ordenar livros por título em ordem ascendente")
+    void testListarLivrosOrdenadosPorTituloAsc() {
+        // Cadastrar livros com títulos em ordem não alfabética
+        String uuid = uuid();
+        List<String> titulos = List.of("Zebra" + uuid, "Cachorro" + uuid, "Abelha" + uuid, "Macaco" + uuid, "Tigre" + uuid);
+        cadastrarLivrosComTitulos(titulos);
+
+        // Listar com ordenação ascendente por título
+        spec
+                .given()
+                .contentType("application/json")
+                .header("Authorization", "Bearer " + token)
+                .queryParam("sort", "titulo,asc")
+                .when()
+                .get("api/v1/livros")
+                .then()
+                .statusCode(200)
+                .extract()
+                .response();
+
+    }
+
+    @Test
+    @DisplayName("Deve ordenar livros por título em ordem descendente")
+    void testListarLivrosOrdenadosPorTituloDesc() {
+        // Cadastrar livros com títulos em ordem não alfabética
+        String uuid = uuid();
+        List<String> titulos = List.of("Zebra" + uuid, "Cachorro" + uuid, "Abelha" + uuid, "Macaco" + uuid, "Tigre" + uuid);
+        cadastrarLivrosComTitulos(titulos);
+
+        // Listar com ordenação descendente por título
+        spec
+                .given()
+                .contentType("application/json")
+                .header("Authorization", "Bearer " + token)
+                .queryParam("sort", "titulo,desc")
+                .when()
+                .get("api/v1/livros")
+                .then()
+                .statusCode(200)
+                .extract()
+                .response();
+    }
+
+    private List<LivroCreateRequestDto> cadastrarNLivros(int quantidade, String uuid) {
+        List<LivroCreateRequestDto> livros = new ArrayList<>();
+
+        for (int i = 0; i < quantidade; i++) {
+            LivroCreateRequestDto livro = criarLivroValido();
+            livro.setTitle("Livro Teste " + uuid + i);
+
+            spec
+                    .given()
+                    .contentType("application/json")
+                    .header("Authorization", "Bearer " + token)
+                    .body(livro)
+                    .when()
+                    .post("api/v1/livros")
+                    .then()
+                    .statusCode(201);
+
+            livros.add(livro);
+        }
+
+        return livros;
+    }
+
+    private void cadastrarLivrosComTitulos(List<String> titulos) {
+        for (String titulo : titulos) {
+            LivroCreateRequestDto livro = criarLivroValido();
+            livro.setTitle(titulo);
+
+            spec
+                    .given()
+                    .contentType("application/json")
+                    .header("Authorization", "Bearer " + token)
+                    .body(livro)
+                    .when()
+                    .post("api/v1/livros")
+                    .then()
+                    .statusCode(201);
+        }
+    }
+
 }
