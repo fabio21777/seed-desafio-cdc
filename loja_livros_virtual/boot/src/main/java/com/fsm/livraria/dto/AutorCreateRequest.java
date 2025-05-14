@@ -11,13 +11,13 @@ import java.util.UUID;
 
 @Serdeable
 @ReflectiveAccess
+@AutorNotDuplicateEmail(message = "Email já cadastrado")
 public record AutorCreateRequest(
         UUID uuid,
         @NotBlank(message = "Nome não pode ser vazio")
         String name,
         @NotBlank(message = "Email não pode ser vazio")
         @Email(message = "Email inválido")
-        @AutorNotDuplicateEmail(message = "Email já cadastrado")
         String email,
         @Size(max = 400, message = "Descrição não pode ter mais de 400 caracteres")
         String description

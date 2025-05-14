@@ -31,15 +31,10 @@ class CategoriaNotDuplicatenNameCategoriaValidator {
      * @return A {@link ConstraintValidator} implementation of a {@link CategoriaNotDuplicateName} constraint for type {@link String}.
      */
     @Singleton
-    ConstraintValidator<CategoriaNotDuplicateName, String> notDuplicateEmailValidator() {
-        return (name, annotationMetadata, context) -> {
-            // Check if it's an update operation
-            Object validatedObject = context.getRootBean();
-            UUID uuid = null;
-            if (validatedObject instanceof CategoriaCreateRequest) {
-                uuid = ((CategoriaCreateRequest) validatedObject).getUuid();
-            }
-            return CategoriaNameValidationUtils.isValid(name, repository, uuid);
+    ConstraintValidator<CategoriaNotDuplicateName, CategoriaCreateRequest> notDuplicateEmailValidator() {
+        return (request, annotationMetadata, context) -> {
+            UUID uuid =  request.getUuid();
+            return CategoriaNameValidationUtils.isValid(request.getName(), repository, uuid);
         };
     }
 }

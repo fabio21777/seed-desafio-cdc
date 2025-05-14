@@ -28,15 +28,10 @@ class AutorNotDuplicateEmailAutorValidator {
      * @return A {@link ConstraintValidator} implementation of a {@link AutorNotDuplicateEmail} constraint for type {@link String}.
      */
     @Singleton
-    ConstraintValidator<AutorNotDuplicateEmail, String> notDuplicateEmailValidator() {
-        return (email, annotationMetadata, context) -> {
-            // Check if it's an update operation
-            Object validatedObject = context.getRootBean();
-            UUID uuid = null;
-            if (validatedObject instanceof AutorCreateRequest) {
-                uuid = ((AutorCreateRequest) validatedObject).uuid();
-            }
-            return AutorEmailValidationUtils.isValid(email, autorRepository, uuid);
+    ConstraintValidator<AutorNotDuplicateEmail, AutorCreateRequest> notDuplicateEmailValidator() {
+        return (request, annotationMetadata, context) -> {
+            UUID uuid =   request.uuid();
+            return AutorEmailValidationUtils.isValid(request.email(), autorRepository, uuid);
         };
     }
 }

@@ -7,12 +7,12 @@ import jakarta.validation.constraints.NotBlank;
 import java.util.UUID;
 
 @Serdeable
+@CategoriaNotDuplicateName(message = "Categoria já cadastrada")
 public class CategoriaCreateRequest {
 
     private UUID uuid;
 
     @NotBlank
-    @CategoriaNotDuplicateName(message = "Categoria já cadastrada")
     private String name;
 
     public CategoriaCreateRequest() {
