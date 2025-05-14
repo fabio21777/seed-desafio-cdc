@@ -4,7 +4,6 @@ import com.fsm.livraria.domain.Autor;
 import com.fsm.livraria.dto.AutorCreateRequest;
 import com.fsm.livraria.dto.AutorDto;
 import com.fsm.livraria.repositories.AutorRepository;
-import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
@@ -15,15 +14,15 @@ import jakarta.validation.Valid;
 
 @Controller
 @Secured(SecurityRule.IS_ANONYMOUS)
-public class LivrariaCreateControllers {
+public class AutorCreateControllers {
 
     private final AutorRepository autorRepository;
 
-    public LivrariaCreateControllers(AutorRepository autorRepository) {
+    public AutorCreateControllers(AutorRepository autorRepository) {
         this.autorRepository = autorRepository;
     }
 
-    @Post("api/v1/livraria")
+    @Post("api/v1/author")
     public HttpResponse<AutorDto> create(@Body @Valid AutorCreateRequest request){
         Autor autor = autorRepository.save(request.name(),
                 request.email(),

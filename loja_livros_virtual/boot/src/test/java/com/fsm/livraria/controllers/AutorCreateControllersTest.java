@@ -7,11 +7,12 @@ import io.restassured.specification.RequestSpecification;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 
+import static com.fsm.livraria.controllers.UtilsTest.uuid;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @MicronautTest
-public class LivrariaCreateControllersTest {
+public class AutorCreateControllersTest {
 
     @Inject
     RequestSpecification spec;
@@ -25,6 +26,7 @@ public class LivrariaCreateControllersTest {
     @Test
     public void testCriarAutorComSucesso() {
         AutorCreateRequest request = new AutorCreateRequest(
+                null,
                 "Jorge Amado",
                 "jorge"+uuid() +"@exemplo.com",
                 "Autor brasileiro de renome"
@@ -34,7 +36,7 @@ public class LivrariaCreateControllersTest {
                 .when()
                 .body(request)
                 .contentType("application/json")
-                .post("/api/v1/livraria")
+                .post("/api/v1/author")
                 .then()
                 .statusCode(HttpStatus.CREATED.getCode())
                 .body("name", equalTo("Jorge Amado"))
@@ -46,6 +48,7 @@ public class LivrariaCreateControllersTest {
     @Test
     public void testEmailNaoPodeSerVazio() {
         AutorCreateRequest request = new AutorCreateRequest(
+                null,
                 "Jorge Amado",
                 "",  // Email vazio
                 "Autor brasileiro de renome"
@@ -55,7 +58,7 @@ public class LivrariaCreateControllersTest {
                 .when()
                 .body(request)
                 .contentType("application/json")
-                .post("/api/v1/livraria")
+                .post("/api/v1/author")
                 .then()
                 .statusCode(HttpStatus.UNPROCESSABLE_ENTITY.getCode())
                 .body("message", containsString("Email não pode ser vazio"));
@@ -64,6 +67,7 @@ public class LivrariaCreateControllersTest {
     @Test
     public void testEmailDeveSerValido() {
         AutorCreateRequest request = new AutorCreateRequest(
+                null,
                 "Jorge Amado",
                 "email-invalido",  // Email inválido
                 "Autor brasileiro de renome"
@@ -73,7 +77,7 @@ public class LivrariaCreateControllersTest {
                 .when()
                 .body(request)
                 .contentType("application/json")
-                .post("/api/v1/livraria")
+                .post("/api/v1/author")
                 .then()
                 .statusCode(HttpStatus.UNPROCESSABLE_ENTITY.getCode())
                 .body("message", containsString("Email inválido"));
@@ -82,6 +86,7 @@ public class LivrariaCreateControllersTest {
     @Test
     public void testNomeNaoPodeSerVazio() {
         AutorCreateRequest request = new AutorCreateRequest(
+                null,
                 "",  // Nome vazio
                 "jorge@exemplo.com",
                 "Autor brasileiro de renome"
@@ -91,7 +96,7 @@ public class LivrariaCreateControllersTest {
                 .when()
                 .body(request)
                 .contentType("application/json")
-                .post("/api/v1/livraria")
+                .post("/api/v1/author")
                 .then()
                 .statusCode(HttpStatus.UNPROCESSABLE_ENTITY.getCode())
                 .body("message", containsString("Nome não pode ser vazio"));
@@ -102,6 +107,7 @@ public class LivrariaCreateControllersTest {
         String descricaoLonga = "A".repeat(401); // Cria uma string com 401 caracteres
 
         AutorCreateRequest request = new AutorCreateRequest(
+                null,
                 "Jorge Amado",
                 "jorge@exemplo.com",
                 descricaoLonga
@@ -111,7 +117,7 @@ public class LivrariaCreateControllersTest {
                 .when()
                 .body(request)
                 .contentType("application/json")
-                .post("/api/v1/livraria")
+                .post("/api/v1/author")
                 .then()
                 .statusCode(HttpStatus.UNPROCESSABLE_ENTITY.getCode())
                 .body("message", containsString("Descrição não pode ter mais de 400 caracteres"));
@@ -120,6 +126,7 @@ public class LivrariaCreateControllersTest {
     @Test
     public void testDescricaoPodeSerNula() {
         AutorCreateRequest request = new AutorCreateRequest(
+                null,
                 "Jorge Amado",
                 "jorge"+uuid() +"@exemplo.com",
                 ""  // Descrição ser vazia
@@ -129,7 +136,7 @@ public class LivrariaCreateControllersTest {
                 .when()
                 .body(request)
                 .contentType("application/json")
-                .post("/api/v1/livraria")
+                .post("/api/v1/author")
                 .then()
                 .statusCode(HttpStatus.CREATED.getCode());
     }
@@ -140,6 +147,7 @@ public class LivrariaCreateControllersTest {
         String email = "autor.teste" + uuid() + "@exemplo.com";
 
         AutorCreateRequest primeiroAutor = new AutorCreateRequest(
+                null,
                 "Primeiro Autor",
                 email,
                 "Descrição do primeiro autor"
@@ -150,12 +158,13 @@ public class LivrariaCreateControllersTest {
                 .when()
                 .body(primeiroAutor)
                 .contentType("application/json")
-                .post("/api/v1/livraria")
+                .post("/api/v1/author")
                 .then()
                 .statusCode(HttpStatus.CREATED.getCode());
 
         // Tenta criar outro autor com o mesmo email
         AutorCreateRequest segundoAutor = new AutorCreateRequest(
+                null,
                 "Segundo Autor",
                 email,  // Mesmo email do primeiro autor
                 "Descrição do segundo autor"
@@ -166,13 +175,9 @@ public class LivrariaCreateControllersTest {
                 .when()
                 .body(segundoAutor)
                 .contentType("application/json")
-                .post("/api/v1/livraria")
+                .post("/api/v1/author")
                 .then()
                 .statusCode(HttpStatus.UNPROCESSABLE_ENTITY.getCode())
                 .body("message", containsString("Email já cadastrado"));
-    }
-
-    private String  uuid(){
-        return java.util.UUID.randomUUID().toString();
     }
 }

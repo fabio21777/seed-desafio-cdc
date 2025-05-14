@@ -20,6 +20,8 @@ public class Autor extends BaseDomain {
     @Max(value = 400)
     private  String descricao;
 
+    public Autor () {
+    }
 
     public String getEmail() {
         return email;

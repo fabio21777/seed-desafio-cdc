@@ -8,13 +8,14 @@ import io.micronaut.data.repository.CrudRepository;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @JdbcRepository(dialect = Dialect.POSTGRES)
 public interface AutorRepository extends CrudRepository<Autor, Long> {
 
     Autor save(@NotNull String nome, @NotNull String email, @NotNull String descricao);
 
-    boolean existsByEmailAndIdNot(String email, Long id);
+    boolean existsByEmailAndUuidNot(String email, UUID uuid);
     boolean existsByEmail(String email);
 
     Optional<Autor> findByEmail(String email);

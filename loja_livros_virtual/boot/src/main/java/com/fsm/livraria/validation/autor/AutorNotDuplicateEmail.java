@@ -15,10 +15,10 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.PARAMETER, ElementType.TYPE_USE})
 @Retention(RetentionPolicy.RUNTIME)
-@Repeatable(NotDuplicateEmail.List.class)
+@Repeatable(AutorNotDuplicateEmail.List.class)
 @Documented
 @Constraint(validatedBy = {})
-public @interface NotDuplicateEmail {
+public @interface AutorNotDuplicateEmail {
 
     String MESSAGE = "micronaut.NotDuplicateEmail.message";
 
@@ -49,6 +49,6 @@ public @interface NotDuplicateEmail {
         /**
          * @return An array of NotDuplicateEmail.
          */
-        NotDuplicateEmail[] value();
+        AutorNotDuplicateEmail[] value();
     }
 }
