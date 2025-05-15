@@ -182,6 +182,23 @@ class EstadoControllerTest {
                 .body("message", containsString("Já existe um estado com esse nome"));
     }
 
+    @Test
+    @DisplayName("Não deve permitir criar um estado sem um país")
+    void testCriarestadoComPaisNulo() {
+        EstadoCreateRequest request = criarRequest();
+        request.setCountry(null);
+
+        spec
+                .when()
+                .header("Authorization", "Bearer " + token)
+                .body(request)
+                .contentType("application/json")
+                .post(PATH)
+                .then()
+                .statusCode(422)
+                .body("message", containsString("País não pode ser vazio"));
+    }
+
 
     private EstadoCreateRequest criarRequest(){
         return new EstadoCreateRequest(
