@@ -1,12 +1,8 @@
 package com.fsm.livraria.validation.categoria;
 
-import com.fsm.exceptions.exception.ServiceError;
-import com.fsm.livraria.domain.Autor;
-import com.fsm.livraria.domain.Categoria;
 import com.fsm.livraria.dto.CategoriaCreateRequest;
 import com.fsm.livraria.repositories.AutorRepository;
 import com.fsm.livraria.repositories.CategoriaRepository;
-import com.fsm.livraria.validation.autor.AutorEmailValidationUtils;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.validation.validator.constraints.ConstraintValidator;
 import jakarta.inject.Singleton;

@@ -1,7 +1,5 @@
 package com.fsm.livraria.validation.autor;
 
-import com.fsm.exceptions.exception.ServiceError;
-import com.fsm.livraria.domain.Autor;
 import com.fsm.livraria.dto.AutorCreateRequest;
 import com.fsm.livraria.repositories.AutorRepository;
 import io.micronaut.context.annotation.Factory;

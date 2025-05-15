@@ -7,7 +7,7 @@ import io.restassured.specification.RequestSpecification;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 
-import static com.fsm.livraria.controllers.UtilsTest.uuid;
+import static com.fsm.UtilsTest.uuid;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -180,4 +180,5 @@ public class AutorCreateControllersTest {
                 .statusCode(HttpStatus.UNPROCESSABLE_ENTITY.getCode())
                 .body("message", containsString("Email já cadastrado"));
     }
+
 }

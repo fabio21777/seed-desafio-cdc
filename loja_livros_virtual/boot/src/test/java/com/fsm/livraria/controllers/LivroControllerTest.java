@@ -1,12 +1,13 @@
 package com.fsm.livraria.controllers;
 
+import com.fsm.UtilsTest;
 import com.fsm.livraria.domain.Autor;
 import com.fsm.livraria.domain.Categoria;
 import com.fsm.livraria.dto.LivroCreateRequestDto;
 import com.fsm.livraria.dto.LivroDTO;
 import com.fsm.livraria.repositories.AutorRepository;
 import com.fsm.livraria.repositories.CategoriaRepository;
-import io.micronaut.security.authentication.UsernamePasswordCredentials;
+import com.fsm.livraria.repositories.LivroRepository;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import io.restassured.specification.RequestSpecification;
 import jakarta.inject.Inject;
@@ -18,9 +19,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import static com.fsm.livraria.controllers.UtilsTest.uuid;
+import static com.fsm.UtilsTest.uuid;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -37,6 +37,12 @@ class LivroControllerTest {
     @Inject
     AutorRepository autorRepository;
 
+    @Inject
+    LivroRepository livroRepository;
+
+    @Inject
+    UtilsTest utilsTest;
+
     String token;
 
     Autor autor;
@@ -49,16 +55,7 @@ class LivroControllerTest {
         if (token != null) {
             return;
         }
-        this.token = spec
-                .given()
-                .contentType("application/json")
-                .body(new UsernamePasswordCredentials("admin", "admin"))
-                .when()
-                .post("/login")
-                .then()
-                .statusCode(200)
-                .extract()
-                .path("access_token");
+        this.token = utilsTest.getToken();
 
         // Criando um autor e uma categoria para os testes
         this.autor = new Autor("email"+uuid()+"@teste.com.br",
@@ -71,6 +68,7 @@ class LivroControllerTest {
 
 
     }
+
 
     @Test
     void testSanity() {

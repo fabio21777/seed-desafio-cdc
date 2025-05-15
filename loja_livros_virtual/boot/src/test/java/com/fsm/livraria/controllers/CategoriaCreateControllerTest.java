@@ -1,5 +1,6 @@
 package com.fsm.livraria.controllers;
 
+import com.fsm.UtilsTest;
 import com.fsm.livraria.dto.CategoriaCreateRequest;
 import io.micronaut.security.authentication.UsernamePasswordCredentials;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
@@ -11,13 +12,16 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 
-import static com.fsm.livraria.controllers.UtilsTest.uuid;
+import static com.fsm.UtilsTest.uuid;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @MicronautTest
 public class CategoriaCreateControllerTest {
     @Inject
     RequestSpecification spec;
+
+    @Inject
+    UtilsTest utilsTest;
 
     String token;
 
@@ -26,16 +30,7 @@ public class CategoriaCreateControllerTest {
         if (token != null) {
             return;
         }
-        this.token = spec
-                .given()
-                .contentType("application/json")
-                .body(new UsernamePasswordCredentials("admin", "admin"))
-                .when()
-                .post("/login")
-                .then()
-                .statusCode(200)
-                .extract()
-                .path("access_token");
+        this.token = utilsTest.getToken();
     }
 
     @Test
