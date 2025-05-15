@@ -15,10 +15,13 @@ import io.micronaut.security.annotation.Secured;
 import jakarta.validation.Valid;
 
 import java.security.Principal;
+import java.util.UUID;
 
 @Controller
 @Secured("ROLE_ADMIN")
 public class LivroController {
+
+    private final static  String PATH = "api/v1/book";
 
     private final LivroRepository livroRepository;
 
@@ -32,17 +35,21 @@ public class LivroController {
         this.categoriaRepository = categoriaRepository;
     }
 
-    @Post("api/v1/livros")
+    @Post(PATH)
     public HttpResponse<LivroDTO> create(@Body @Valid LivroCreateRequestDto request, Principal principal) {
         Livro livro = livroRepository.save(request.toEntity(autorRepository,
                 categoriaRepository));
         return HttpResponse.created(new LivroDTO(livro));
     }
-
-    @Get("api/v1/livros")
+    @Get(PATH)
     public HttpResponse<Page<LivroList>> list(@Valid Pageable page) {
         Page<LivroList> livros = livroRepository.findAllLivros(page);
         return HttpResponse.ok(livros);
+    }
+    @Get(PATH + "/{uuid}")
+    public HttpResponse<LivroDTO> findById(@PathVariable UUID uuid) {
+        Livro livro = livroRepository.findByUuidOrThrow(uuid);
+        return HttpResponse.ok(new LivroDTO(livro));
     }
 
 }

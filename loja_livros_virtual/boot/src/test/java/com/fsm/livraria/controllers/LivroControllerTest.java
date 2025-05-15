@@ -3,6 +3,7 @@ package com.fsm.livraria.controllers;
 import com.fsm.livraria.domain.Autor;
 import com.fsm.livraria.domain.Categoria;
 import com.fsm.livraria.dto.LivroCreateRequestDto;
+import com.fsm.livraria.dto.LivroDTO;
 import com.fsm.livraria.repositories.AutorRepository;
 import com.fsm.livraria.repositories.CategoriaRepository;
 import io.micronaut.security.authentication.UsernamePasswordCredentials;
@@ -26,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @MicronautTest
 class LivroControllerTest {
 
+    public static final String PATH = "api/v1/book";
     @Inject
     RequestSpecification spec;
 
@@ -101,7 +103,7 @@ class LivroControllerTest {
                 .header("Authorization", "Bearer " + token)
                 .body(livro)
                 .when()
-                .post("api/v1/livros")
+                .post(PATH)
                 .then()
                 .statusCode(201)
                 .extract()
@@ -124,7 +126,7 @@ class LivroControllerTest {
                 .header("Authorization", "Bearer " + token)
                 .body(livro)
                 .when()
-                .post("api/v1/livros")
+                .post(PATH)
                 .then()
                 .statusCode(422)
                 .extract()
@@ -146,7 +148,7 @@ class LivroControllerTest {
                 .header("Authorization", "Bearer " + token)
                 .body(livro1)
                 .when()
-                .post("api/v1/livros")
+                .post(PATH)
                 .then()
                 .statusCode(201);
 
@@ -160,7 +162,7 @@ class LivroControllerTest {
                 .header("Authorization", "Bearer " + token)
                 .body(livro2)
                 .when()
-                .post("api/v1/livros")
+                .post(PATH)
                 .then()
                 .statusCode(422)
                 .extract()
@@ -182,7 +184,7 @@ class LivroControllerTest {
                 .header("Authorization", "Bearer " + token)
                 .body(livro)
                 .when()
-                .post("api/v1/livros")
+                .post(PATH)
                 .then()
                 .statusCode(422)
                 .extract()
@@ -205,7 +207,7 @@ class LivroControllerTest {
                 .header("Authorization", "Bearer " + token)
                 .body(livro)
                 .when()
-                .post("api/v1/livros")
+                .post(PATH)
                 .then()
                 .statusCode(422)
                 .extract()
@@ -227,7 +229,7 @@ class LivroControllerTest {
                 .header("Authorization", "Bearer " + token)
                 .body(livro)
                 .when()
-                .post("api/v1/livros")
+                .post(PATH)
                 .then()
                 .statusCode(422)
                 .extract()
@@ -249,7 +251,7 @@ class LivroControllerTest {
                 .header("Authorization", "Bearer " + token)
                 .body(livro)
                 .when()
-                .post("api/v1/livros")
+                .post(PATH)
                 .then()
                 .statusCode(422)
                 .extract()
@@ -271,7 +273,7 @@ class LivroControllerTest {
                 .header("Authorization", "Bearer " + token)
                 .body(livro)
                 .when()
-                .post("api/v1/livros")
+                .post(PATH)
                 .then()
                 .statusCode(422)
                 .extract()
@@ -293,7 +295,7 @@ class LivroControllerTest {
                 .header("Authorization", "Bearer " + token)
                 .body(livro1)
                 .when()
-                .post("api/v1/livros")
+                .post(PATH)
                 .then()
                 .statusCode(201);
 
@@ -309,7 +311,7 @@ class LivroControllerTest {
                 .header("Authorization", "Bearer " + token)
                 .body(livro2)
                 .when()
-                .post("api/v1/livros")
+                .post(PATH)
                 .then()
                 .statusCode(422)
                 .extract()
@@ -331,7 +333,7 @@ class LivroControllerTest {
                 .header("Authorization", "Bearer " + token)
                 .body(livro)
                 .when()
-                .post("api/v1/livros")
+                .post(PATH)
                 .then()
                 .statusCode(422)
                 .extract()
@@ -353,7 +355,7 @@ class LivroControllerTest {
                 .header("Authorization", "Bearer " + token)
                 .body(livro)
                 .when()
-                .post("api/v1/livros")
+                .post(PATH)
                 .then()
                 .statusCode(422)
                 .extract()
@@ -375,7 +377,7 @@ class LivroControllerTest {
                 .header("Authorization", "Bearer " + token)
                 .body(livro)
                 .when()
-                .post("api/v1/livros")
+                .post(PATH)
                 .then()
                 .statusCode(422)
                 .extract()
@@ -396,7 +398,7 @@ class LivroControllerTest {
                 .header("Authorization", "Bearer " + token)
                 .body(livro1)
                 .when()
-                .post("api/v1/livros")
+                .post(PATH)
                 .then()
                 .statusCode(201);
 
@@ -406,7 +408,7 @@ class LivroControllerTest {
                 .contentType("application/json")
                 .header("Authorization", "Bearer " + token)
                 .when()
-                .get("api/v1/livros")
+                .get(PATH)
                 .then()
                 .statusCode(200)
                 .extract()
@@ -425,7 +427,7 @@ class LivroControllerTest {
                 .contentType("application/json")
                 .header("Authorization", "Bearer " + token)
                 .when()
-                .get("api/v1/livros")
+                .get(PATH)
                 .then()
                 .statusCode(200)
                 .body("content", hasSize(greaterThanOrEqualTo(5)))
@@ -450,7 +452,7 @@ class LivroControllerTest {
                 .queryParam("size", 3)
                 .queryParam("page", 0)
                 .when()
-                .get("api/v1/livros")
+                .get(PATH)
                 .then()
                 .statusCode(200)
                 .body("content", hasSize(3))
@@ -465,7 +467,7 @@ class LivroControllerTest {
                 .queryParam("size", 3)
                 .queryParam("page", 1)
                 .when()
-                .get("api/v1/livros")
+                .get(PATH)
                 .then()
                 .statusCode(200)
                 .body("content", hasSize(3));
@@ -486,7 +488,7 @@ class LivroControllerTest {
                 .header("Authorization", "Bearer " + token)
                 .queryParam("sort", "titulo,asc")
                 .when()
-                .get("api/v1/livros")
+                .get(PATH)
                 .then()
                 .statusCode(200)
                 .extract()
@@ -509,12 +511,85 @@ class LivroControllerTest {
                 .header("Authorization", "Bearer " + token)
                 .queryParam("sort", "titulo,desc")
                 .when()
-                .get("api/v1/livros")
+                .get(PATH)
                 .then()
                 .statusCode(200)
                 .extract()
                 .response();
     }
+
+    @Test
+    @DisplayName("Deve retornar detalhes do livro cadastrado")
+    void testDetalhesLivroCadastrado() {
+        // Primeiro, cadastramos um livro válido
+        LivroCreateRequestDto livro1 = criarLivroValido();
+
+        var response = spec
+                .given()
+                .contentType("application/json")
+                .header("Authorization", "Bearer " + token)
+                .body(livro1)
+                .when()
+                .post(PATH)
+                .then()
+                .statusCode(201)
+                .extract()
+                .response();
+
+        LivroDTO livroDto = response.as(LivroDTO.class);
+
+        // Agora tentamos obter os detalhes do livro cadastrado
+        var responseUuid  = spec
+                .given()
+                .contentType("application/json")
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .get( PATH + "/" + livroDto.getUuid())
+                .then()
+                .statusCode(200)
+                .body("title", equalTo(livro1.getTitle()))
+                .body("uuid", equalTo(livroDto.getUuid().toString()))
+                .extract()
+                .response();
+        //asserts dos detalhes do livro
+        LivroDTO livroDetalhes = responseUuid.as(LivroDTO.class);
+
+        assertEquals(livroDto.getTitle(), livroDetalhes.getTitle());
+        assertEquals(livroDto.getSummary(), livroDetalhes.getSummary());
+        assertEquals(livroDto.getContent(), livroDetalhes.getContent());
+        assertEquals(livroDto.getPrice(), livroDetalhes.getPrice());
+        assertEquals(livroDto.getNumberOfPages(), livroDetalhes.getNumberOfPages());
+        assertEquals(livroDto.getIsbn(), livroDetalhes.getIsbn());
+        assertEquals(livroDto.getPublicationDate(), livroDetalhes.getPublicationDate());
+
+        //detalhes do autor
+        assertEquals(livroDto.getAuthor().getName(), livroDetalhes.getAuthor().getName());
+        assertEquals(livroDto.getAuthor().getEmail(), livroDetalhes.getAuthor().getEmail());
+        assertEquals(livroDto.getAuthor().getDescription(), livroDetalhes.getAuthor().getDescription());
+
+        //detalhes da categoria
+        assertEquals(livroDto.getCategory().getName(), livroDetalhes.getCategory().getName());
+    }
+
+    @Test
+    @DisplayName("Deve retornar erro ao tentar acessar livro não cadastrado")
+    void testDetalhesLivroNaoCadastrado() {
+        // UUID inválido
+        String uuidInvalido = "123e4567-e89b-12d3-a456-426614174000";
+
+        // Tentar obter detalhes do livro com UUID inválido
+        spec
+                .given()
+                .contentType("application/json")
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .get(PATH + "/" + uuidInvalido)
+                .then()
+                .statusCode(404)
+                .body("message", equalTo("Livro não encontrado"));
+    }
+
+
 
     private List<LivroCreateRequestDto> cadastrarNLivros(int quantidade, String uuid) {
         List<LivroCreateRequestDto> livros = new ArrayList<>();
@@ -529,7 +604,7 @@ class LivroControllerTest {
                     .header("Authorization", "Bearer " + token)
                     .body(livro)
                     .when()
-                    .post("api/v1/livros")
+                    .post(PATH)
                     .then()
                     .statusCode(201);
 
@@ -550,10 +625,11 @@ class LivroControllerTest {
                     .header("Authorization", "Bearer " + token)
                     .body(livro)
                     .when()
-                    .post("api/v1/livros")
+                    .post(PATH)
                     .then()
                     .statusCode(201);
         }
     }
+
 
 }

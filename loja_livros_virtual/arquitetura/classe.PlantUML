@@ -1,7 +1,3 @@
-# micronaut-boot
-projeto de boot micronaut
-
-```plantuml
 @startuml
 
 ' Base class
@@ -101,5 +97,3 @@ UserRoleId "*" -- "1" Role : references >
 Estado "*" -- "1" Pais : pertence >
 
 @enduml
-
-```

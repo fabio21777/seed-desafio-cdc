@@ -14,23 +14,33 @@ import java.time.LocalDateTime;
 @MappedEntity
 public class Livro extends BaseDomain {
 
+    @NotBlank
     private String titulo;
 
+    @NotBlank
     private String resumo;
+
 
     private String sumario; //md ou html
 
+    @NotNull
+    @Min(value = 20)
     private BigDecimal preco;
 
+    @NotNull
     private Integer numeroPaginas;
 
+    @NotBlank
     private String isbn;
 
+    @NotNull
     private LocalDateTime publicacao;
 
+    @NotNull
     @Relation(value = Relation.Kind.MANY_TO_ONE)
     private Categoria categoria;
 
+    @NotNull
     @Relation(value = Relation.Kind.MANY_TO_ONE)
     private Autor autor;
 
