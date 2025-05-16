@@ -1,4 +1,4 @@
-package com.fsm.livraria.dto;
+package com.fsm.livraria.dto.livro;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fsm.exceptions.exception.NotFoundError;

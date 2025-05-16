@@ -1,6 +1,6 @@
 package com.fsm.livraria.controllers;
 
-import com.fsm.livraria.dto.AutorCreateRequest;
+import com.fsm.livraria.dto.autor.AutorCreateRequest;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import io.restassured.specification.RequestSpecification;

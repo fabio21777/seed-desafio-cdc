@@ -1,4 +1,4 @@
-package com.fsm.livraria.dto;
+package com.fsm.livraria.dto.paisestado;
 
 import com.fsm.livraria.domain.Pais;
 import io.micronaut.serde.annotation.Serdeable;

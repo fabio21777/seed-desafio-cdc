@@ -1,7 +1,6 @@
-package com.fsm.livraria.dto;
+package com.fsm.livraria.dto.paisestado;
 
 import com.fsm.livraria.domain.Estado;
-import com.fsm.livraria.repositories.AutorRepository;
 import com.fsm.livraria.repositories.PaisRepository;
 import com.fsm.livraria.validation.estado.EstadoNotDuplicateName;
 import io.micronaut.serde.annotation.Serdeable;

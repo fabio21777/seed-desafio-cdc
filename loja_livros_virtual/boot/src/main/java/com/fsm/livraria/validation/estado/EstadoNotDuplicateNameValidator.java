@@ -1,13 +1,9 @@
 package com.fsm.livraria.validation.estado;
 
-import com.fsm.livraria.dto.AutorCreateRequest;
 import com.fsm.livraria.repositories.EstadoRepository;
-import com.fsm.livraria.repositories.PaisRepository;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.validation.validator.constraints.ConstraintValidator;
 import jakarta.inject.Singleton;
-
-import java.util.UUID;
 
 @Factory
 class EstadoNotDuplicateNameValidator {

@@ -1,9 +1,8 @@
 package com.fsm.livraria.controllers;
 
 import com.fsm.livraria.domain.Pais;
-import com.fsm.livraria.dto.PaisCreateRequest;
-import com.fsm.livraria.dto.PaisDto;
-import com.fsm.livraria.repositories.AutorRepository;
+import com.fsm.livraria.dto.paisestado.PaisCreateRequest;
+import com.fsm.livraria.dto.paisestado.PaisDto;
 import com.fsm.livraria.repositories.PaisRepository;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;

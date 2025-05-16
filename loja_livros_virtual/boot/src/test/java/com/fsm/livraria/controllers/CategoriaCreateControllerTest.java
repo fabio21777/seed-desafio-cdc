@@ -1,8 +1,7 @@
 package com.fsm.livraria.controllers;
 
 import com.fsm.UtilsTest;
-import com.fsm.livraria.dto.CategoriaCreateRequest;
-import io.micronaut.security.authentication.UsernamePasswordCredentials;
+import com.fsm.livraria.dto.Categoria.CategoriaCreateRequest;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import io.restassured.specification.RequestSpecification;
 import jakarta.inject.Inject;

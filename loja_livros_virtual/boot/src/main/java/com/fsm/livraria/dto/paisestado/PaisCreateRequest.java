@@ -1,8 +1,7 @@
-package com.fsm.livraria.dto;
+package com.fsm.livraria.dto.paisestado;
 
 import com.fsm.livraria.validation.pais.PaisNotDuplicateName;
 import io.micronaut.serde.annotation.Serdeable;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 

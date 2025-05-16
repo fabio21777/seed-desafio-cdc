@@ -1,6 +1,6 @@
 package com.fsm.livraria.validation.autor;
 
-import com.fsm.livraria.dto.AutorCreateRequest;
+import com.fsm.livraria.dto.autor.AutorCreateRequest;
 import com.fsm.livraria.repositories.AutorRepository;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.validation.validator.constraints.ConstraintValidator;

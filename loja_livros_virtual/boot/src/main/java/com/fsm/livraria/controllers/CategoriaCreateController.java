@@ -1,8 +1,8 @@
 package com.fsm.livraria.controllers;
 
 import com.fsm.livraria.domain.Categoria;
-import com.fsm.livraria.dto.CategoriaCreateRequest;
-import com.fsm.livraria.dto.CategoriaDto;
+import com.fsm.livraria.dto.Categoria.CategoriaCreateRequest;
+import com.fsm.livraria.dto.Categoria.CategoriaDto;
 import com.fsm.livraria.repositories.CategoriaRepository;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;

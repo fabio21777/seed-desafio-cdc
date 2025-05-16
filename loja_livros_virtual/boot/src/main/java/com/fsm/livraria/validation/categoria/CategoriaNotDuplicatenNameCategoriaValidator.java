@@ -1,7 +1,6 @@
 package com.fsm.livraria.validation.categoria;
 
-import com.fsm.livraria.dto.CategoriaCreateRequest;
-import com.fsm.livraria.repositories.AutorRepository;
+import com.fsm.livraria.dto.Categoria.CategoriaCreateRequest;
 import com.fsm.livraria.repositories.CategoriaRepository;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.validation.validator.constraints.ConstraintValidator;

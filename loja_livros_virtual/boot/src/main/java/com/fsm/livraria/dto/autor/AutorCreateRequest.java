@@ -1,4 +1,4 @@
-package com.fsm.livraria.dto;
+package com.fsm.livraria.dto.autor;
 
 import com.fsm.livraria.validation.autor.AutorNotDuplicateEmail;
 import io.micronaut.core.annotation.ReflectiveAccess;

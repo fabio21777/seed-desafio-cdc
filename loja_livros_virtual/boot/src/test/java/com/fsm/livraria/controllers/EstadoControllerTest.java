@@ -3,8 +3,8 @@ package com.fsm.livraria.controllers;
 import com.fsm.UtilsTest;
 
 import com.fsm.livraria.domain.Pais;
-import com.fsm.livraria.dto.EstadoCreateRequest;
-import com.fsm.livraria.dto.EstadoDto;
+import com.fsm.livraria.dto.paisestado.EstadoCreateRequest;
+import com.fsm.livraria.dto.paisestado.EstadoDto;
 import com.fsm.livraria.repositories.PaisRepository;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import io.restassured.response.Response;

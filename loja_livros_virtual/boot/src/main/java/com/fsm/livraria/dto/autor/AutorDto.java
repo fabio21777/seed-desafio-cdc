@@ -1,10 +1,7 @@
-package com.fsm.livraria.dto;
+package com.fsm.livraria.dto.autor;
 
 import com.fsm.livraria.domain.Autor;
 import io.micronaut.serde.annotation.Serdeable;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
 

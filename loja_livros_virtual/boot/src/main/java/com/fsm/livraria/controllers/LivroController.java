@@ -1,9 +1,9 @@
 package com.fsm.livraria.controllers;
 
 import com.fsm.livraria.domain.Livro;
-import com.fsm.livraria.dto.LivroCreateRequestDto;
-import com.fsm.livraria.dto.LivroDTO;
-import com.fsm.livraria.dto.LivroList;
+import com.fsm.livraria.dto.livro.LivroCreateRequestDto;
+import com.fsm.livraria.dto.livro.LivroDTO;
+import com.fsm.livraria.dto.livro.LivroList;
 import com.fsm.livraria.repositories.AutorRepository;
 import com.fsm.livraria.repositories.CategoriaRepository;
 import com.fsm.livraria.repositories.LivroRepository;

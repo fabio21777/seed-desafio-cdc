@@ -1,9 +1,9 @@
-package com.fsm.livraria.dto;
+package com.fsm.livraria.dto.livro;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fsm.livraria.domain.Livro;
+import com.fsm.livraria.dto.Categoria.CategoriaDto;
+import com.fsm.livraria.dto.autor.AutorDto;
 import io.micronaut.serde.annotation.Serdeable;
-import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

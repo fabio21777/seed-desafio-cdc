@@ -1,4 +1,4 @@
-package com.fsm.livraria.dto;
+package com.fsm.livraria.dto.livro;
 
 import io.micronaut.serde.annotation.Serdeable;
 

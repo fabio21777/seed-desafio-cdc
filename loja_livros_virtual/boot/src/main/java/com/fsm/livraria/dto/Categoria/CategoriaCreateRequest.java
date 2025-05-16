@@ -1,4 +1,4 @@
-package com.fsm.livraria.dto;
+package com.fsm.livraria.dto.Categoria;
 
 import com.fsm.livraria.validation.categoria.CategoriaNotDuplicateName;
 import io.micronaut.serde.annotation.Serdeable;

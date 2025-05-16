@@ -2,7 +2,7 @@ package com.fsm.livraria.repositories;
 
 import com.fsm.exceptions.exception.NotFoundError;
 import com.fsm.livraria.domain.Livro;
-import com.fsm.livraria.dto.LivroList;
+import com.fsm.livraria.dto.livro.LivroList;
 import io.micronaut.data.annotation.Join;
 import io.micronaut.data.annotation.Query;
 import io.micronaut.data.jdbc.annotation.JdbcRepository;
