@@ -21,6 +21,6 @@ public interface PaisRepository extends CrudRepository <Pais, Long> {
     Optional<Pais> findByUuid(UUID uuid);
 
     default Pais findByUuidOrElseThrow(UUID uuid) {
-        return findByUuid(uuid).orElseThrow(() -> new NotFoundError("Pais não encontrado"));
+        return findByUuid(uuid).orElseThrow(() -> new NotFoundError("País não encontrado"));
     }
 }

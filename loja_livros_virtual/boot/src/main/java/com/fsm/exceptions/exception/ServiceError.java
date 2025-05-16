@@ -11,6 +11,12 @@ public class ServiceError extends  RuntimeException {
         this.status = status;
     }
 
+    public ServiceError(String message) {
+        super(message);
+        this.message = message;
+        this.status = 400;
+    }
+
     public String getMessage() {
         return message;
     }

@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Random;
 
+import static com.fsm.UtilsTest.gerarSiglaAleatoria;
 import static com.fsm.UtilsTest.uuid;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -34,10 +35,6 @@ class PaisControllerTest {
     private String token;
 
     private final static String PATH = "/api/v1/country";
-
-    private static final String LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    private static final int SIGLA_LENGTH = 2;
-    private static final Random RANDOM = new Random();
 
 
     @BeforeEach
@@ -178,17 +175,6 @@ class PaisControllerTest {
                 uuid(),
                gerarSiglaAleatoria()
         );
-    }
-
-
-
-    private String gerarSiglaAleatoria() {
-        StringBuilder sb = new StringBuilder(SIGLA_LENGTH);
-        for (int i = 0; i < SIGLA_LENGTH; i++) {
-            int index = RANDOM.nextInt(LETTERS.length());
-            sb.append(LETTERS.charAt(index));
-        }
-        return sb.toString();
     }
 
 }

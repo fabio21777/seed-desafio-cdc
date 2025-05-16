@@ -20,6 +20,9 @@ public class EstadoDto {
     }
 
     public  EstadoDto(Estado estado){
+        if (estado == null) {
+            return;
+        }
         this.uuid = estado.getUuid();
         this.name = estado.getNome();
         this.abreviation = estado.getSigla();

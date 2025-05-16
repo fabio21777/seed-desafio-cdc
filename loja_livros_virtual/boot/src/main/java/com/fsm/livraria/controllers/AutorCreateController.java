@@ -14,11 +14,11 @@ import jakarta.validation.Valid;
 
 @Controller
 @Secured(SecurityRule.IS_ANONYMOUS)
-public class AutorCreateControllers {
+public class AutorCreateController {
 
     private final AutorRepository autorRepository;
 
-    public AutorCreateControllers(AutorRepository autorRepository) {
+    public AutorCreateController(AutorRepository autorRepository) {
         this.autorRepository = autorRepository;
     }
 

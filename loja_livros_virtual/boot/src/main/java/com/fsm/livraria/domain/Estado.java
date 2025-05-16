@@ -27,6 +27,8 @@ public class Estado extends BaseDomain {
         this.pais = pais;
     }
 
+
+
     public String getNome() {
         return nome;
     }
