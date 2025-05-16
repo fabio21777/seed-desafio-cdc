@@ -43,6 +43,25 @@ class Estado {
 }
 note bottom of Estado: O nome é obrigatório e único
 
+' Compra entity
+class Compra {
+  -String email <<@Email @NotBlank>>
+  -String nome <<@NotBlank>>
+  -String sobrenome <<@NotBlank>>
+  -String documento <<@NotBlank>> ' CPF ou CNPJ'
+  -String endereco <<@NotBlank>>
+  -String complemento <<@NotBlank>>
+  -String cidade <<@NotBlank>>
+  -String telefone <<@NotBlank>>
+  -String cep <<@NotBlank>>
+}
+
+note bottom of Compra
+  - Estado é obrigatório apenas se o país tiver estados
+  - Documento pode ser CPF ou CNPJ, validação personalizada necessária
+end note
+
+' Refresh/Auth/User entities
 class RefreshToken {
   -Long id
   -String username
@@ -85,6 +104,7 @@ BaseDomain <|-- Categoria
 BaseDomain <|-- Autor
 BaseDomain <|-- Pais
 BaseDomain <|-- Estado
+BaseDomain <|-- Compra
 User ..|> UserState
 
 ' Entity relationships
@@ -95,5 +115,7 @@ UserRole "*" -- "1" Role : has >
 UserRoleId "*" -- "1" User : references >
 UserRoleId "*" -- "1" Role : references >
 Estado "*" -- "1" Pais : pertence >
+Compra "*" -- "1" Pais : pertence >
+Compra "*" -- "0..1" Estado : opcional >
 
 @enduml
