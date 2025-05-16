@@ -49,6 +49,10 @@ public class Compra extends BaseDomain {
     @Pattern(regexp = "\\d{5}-\\d{3}", message = "CEP inválido")
     private String cep;
 
+    @Relation(value = Relation.Kind.ONE_TO_ONE, mappedBy = "compra", cascade = Relation.Cascade.PERSIST)
+    private Carrinho carrinho;
+
+
     public Compra() {
     }
 
@@ -154,5 +158,11 @@ public class Compra extends BaseDomain {
         this.cep = cep;
     }
 
+    public Carrinho getCarrinho() {
+        return carrinho;
+    }
 
+    public void setCarrinho(Carrinho carrinho) {
+        this.carrinho = carrinho;
+    }
 }

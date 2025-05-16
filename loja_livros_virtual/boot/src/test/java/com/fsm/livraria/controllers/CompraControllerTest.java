@@ -1,13 +1,14 @@
 package com.fsm.livraria.controllers;
 
 import com.fsm.UtilsTest;
-import com.fsm.livraria.domain.Estado;
-import com.fsm.livraria.domain.Pais;
+import com.fsm.livraria.domain.*;
+import com.fsm.livraria.dto.compra.CarrinhoItenRequest;
+import com.fsm.livraria.dto.compra.CarrinhoRequest;
 import com.fsm.livraria.dto.compra.CompraCreateRequest;
 import com.fsm.livraria.dto.compra.CompraDto;
+import com.fsm.livraria.dto.livro.LivroCreateRequestDto;
 import com.fsm.livraria.dto.paisestado.EstadoDto;
-import com.fsm.livraria.repositories.EstadoRepository;
-import com.fsm.livraria.repositories.PaisRepository;
+import com.fsm.livraria.repositories.*;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -16,8 +17,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-import java.util.UUID;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.fsm.UtilsTest.uuid;
 import static io.restassured.RestAssured.given;
@@ -39,6 +42,15 @@ class CompraControllerTest {
     @Inject
     PaisRepository paisRepository;
 
+    @Inject
+    LivroRepository livroRepository;
+
+    @Inject
+    AutorRepository autorRepository;
+
+    @Inject
+    CategoriaRepository categoriaRepository;
+
     private String token;
 
     private Pais pais;
@@ -47,18 +59,52 @@ class CompraControllerTest {
 
     private List<Estado> estados;
 
-    private static  final String PATH = "api/v1/purchase";
+    private List<Livro> livros = new ArrayList<>();
+
+    Autor autor;
+
+    Categoria categoria;
+
+    private static final String PATH = "api/v1/purchase";
 
     @BeforeEach
     void setUp() {
-        if (token != null){
+        if (token != null) {
             return;
         }
         this.token = utilsTest.getToken();
         criarPais();
         criarEstados();
         criarPaisSemEstados();
+        criarLivros(3);
 
+    }
+
+    private void criarLivros(int qtdLivros) {
+        //
+        this.autor = new Autor("email" + uuid() + "@teste.com.br",
+                "Nome do Autor" + uuid(),
+                "Descrição do autor");
+
+        this.autor = autorRepository.save(autor);
+
+        this.categoria = categoriaRepository.save("Categoria Teste " + uuid());
+        Livro livro = null;
+        for (int i = 0; i < qtdLivros; i++) {
+            livro = new Livro(
+                    "Java Efetivo: Programação Prática" + uuid(),
+                    "Um guia prático para as melhores práticas em Java",
+                    "# Capítulo 1\n\nIntrodução ao Java moderno\n\n# Capítulo 2\n\nBoas práticas de programação",
+                    new BigDecimal("129.90"),
+                    320,
+                    "978-8550804583" + uuid(),
+                    LocalDateTime.now().plusDays(30),
+                    categoria,
+                    autor);
+
+            livro = livroRepository.save(livro);
+            livros.add(livro);
+        }
     }
 
     @Test
@@ -71,7 +117,7 @@ class CompraControllerTest {
     @DisplayName("Deve criar uma compra com sucesso")
     void deveCriarUmaCompraComSucesso() {
         CompraCreateRequest request = criarRequest();
-        Response response  = spec
+        Response response = spec
                 .when()
                 .header("Authorization", "Bearer " + token)
                 .body(request)
@@ -262,17 +308,131 @@ class CompraControllerTest {
                 .body("message", containsString("tem estados, mas nenhum foi informado"));
     }
 
+    @Test
+    @DisplayName("Não deve permitir criar uma compra com um carrinho vazio")
+    void naoDevePermitirCarrinhoVazio() {
+        CompraCreateRequest request = criarRequest();
+        request.setCart(null);
+
+        given()
+                .spec(spec)
+                .header("Authorization", "Bearer " + token)
+                .body(request)
+                .contentType("application/json")
+                .when()
+                .post(PATH)
+                .then()
+                .statusCode(422)
+                .body("message", containsString("O carrinho não pode ser vazio"));
+    }
+
+    @Test
+    @DisplayName("Não deve permitir criar uma compra com um carrinho sem itens")
+    void naoDevePermitirCarrinhoSemItens() {
+        CompraCreateRequest request = criarRequest();
+        request.getCart().setItems(new HashSet<>());
+
+        given()
+                .spec(spec)
+                .header("Authorization", "Bearer " + token)
+                .body(request)
+                .contentType("application/json")
+                .when()
+                .post(PATH)
+                .then()
+                .statusCode(422)
+                .body("message", containsString("A quantidade no carrinho deve ser no mínimo 1"));
+    }
+
+    @Test
+    @DisplayName("Não deve permitir criar uma compra 0 de valor total")
+    void naoDevePermitirValorTotalZero() {
+        CompraCreateRequest request = criarRequest();
+        request.getCart().setTotal(BigDecimal.ZERO);
+
+        given()
+                .spec(spec)
+                .header("Authorization", "Bearer " + token)
+                .body(request)
+                .contentType("application/json")
+                .when()
+                .post(PATH)
+                .then()
+                .statusCode(422)
+                .body("message", containsString("Quantidade deve ser maior que 0"));
+    }
+
+    @Test
+    @DisplayName("Não deve permitir criar uma compra com  o valor total diferente do valor dos livros calculado")
+    void naoDevePermitirValorTotalDiferente() {
+        CompraCreateRequest request = criarRequest();
+        request.getCart().setTotal(new BigDecimal("1000.00"));
+        // valor total diferente do calculado
+
+        given()
+                .spec(spec)
+                .header("Authorization", "Bearer " + token)
+                .body(request)
+                .contentType("application/json")
+                .when()
+                .post(PATH)
+                .then()
+                .statusCode(400)
+                .body("message", containsString("O valor total do carrinho não é igual ao valor dos livros"));
+    }
+
+    @Test
+    @DisplayName("Deve retornar 404 quando o livro não for encontrado")
+    void deveRetornar404QuandoLivroNaoEncontrado() {
+        CompraCreateRequest request = criarRequest();
+        UUID livroInvalido = UUID.randomUUID(); // UUID inválido
+
+        CarrinhoItenRequest carrinhoItenRequest = request.getCart().getItems().stream().findFirst().get();
+        UUID livroUuid = carrinhoItenRequest.getLivro();
+        carrinhoItenRequest.setLivro(livroInvalido); // livro inválido
+        request.getCart().setTotal(request.getCart().getTotal().subtract(livros.stream().filter( livro -> livro.getUuid().equals(livroUuid)).findFirst().get().getPreco())); // subtrai o valor do livro inválido
+
+        given()
+                .spec(spec)
+                .header("Authorization", "Bearer " + token)
+                .body(request)
+                .contentType("application/json")
+                .when()
+                .post(PATH)
+                .then()
+                .statusCode(404)
+                .body("message", containsString("Livro não encontrado com UUID: " + livroInvalido));
+    }
+    @Test
+    @DisplayName("Não deve permitir comprar um livro com quantidade menor que 1")
+    void naoDevePermitirComprarLivroComQuantidadeMenorQue1() {
+        CompraCreateRequest request = criarRequest();
+        CarrinhoItenRequest carrinhoItenRequest = request.getCart().getItems().stream().findFirst().get();
+        carrinhoItenRequest.setQuatity(0); // quantidade menor que 1
+
+        given()
+                .spec(spec)
+                .header("Authorization", "Bearer " + token)
+                .body(request)
+                .contentType("application/json")
+                .when()
+                .post(PATH)
+                .then()
+                .statusCode(422)
+                .body("message", containsString("A quantidade deve ser maior que 0"));
+    }
 
 
     // ============================== Métodos auxiliares ==============================
 
-    private void criarPais(){
+    private void criarPais() {
         pais = new Pais();
         pais.setNome("Brasil" + uuid());
         pais.setSigla("BR");
         pais = paisRepository.save(pais);
     }
-    private Pais criarPaisSemEstados(){
+
+    private Pais criarPaisSemEstados() {
         Pais pais = new Pais();
         pais.setNome("País Sem Estados" + uuid());
         pais.setSigla("PS");
@@ -281,7 +441,7 @@ class CompraControllerTest {
     }
 
 
-    private void criarEstados(){
+    private void criarEstados() {
         estados = List.of(
                 new Estado("São Paulo" + uuid(), "SP", pais),
                 new Estado("Rio de Janeiro" + uuid(), "RJ", pais),
@@ -290,7 +450,7 @@ class CompraControllerTest {
         estados = estadoRepository.saveAll(estados);
     }
 
-    private Estado criarEstadoOutroPais(){
+    private Estado criarEstadoOutroPais() {
         Pais outroPais = new Pais();
         outroPais.setNome("Argentina" + uuid());
         outroPais.setSigla("AR");
@@ -304,7 +464,7 @@ class CompraControllerTest {
         CompraCreateRequest request = new CompraCreateRequest();
 
         request.setEmail("test" + uuid() + "@example.com");
-        request.setFirstName("Nome" +  uuid());
+        request.setFirstName("Nome" + uuid());
         request.setLastName("Sobrenome" + uuid());
         request.setDocument("32630145018");
         request.setAddress("Rua Teste, 123");
@@ -314,6 +474,23 @@ class CompraControllerTest {
         request.setState(estados.getFirst().getUuid());
         request.setPhone("11999887766");
         request.setZipCode("01310-000");
+        request.setCart(criarCarrinhoRequest());
         return request;
+    }
+
+    private CarrinhoRequest criarCarrinhoRequest() {
+        CarrinhoRequest carrinho = new CarrinhoRequest();
+        carrinho.setTotal(livros.stream()
+                .map(Livro::getPreco)
+                .reduce(BigDecimal.ZERO, BigDecimal::add));
+        carrinho.setItems(livros.stream()
+                .map(livro -> {
+                    CarrinhoItenRequest item = new CarrinhoItenRequest();
+                    item.setLivro(livro.getUuid());
+                    item.setQuatity(1);
+                    return item;
+                })
+                .collect(Collectors.toSet()));
+        return carrinho;
     }
 }

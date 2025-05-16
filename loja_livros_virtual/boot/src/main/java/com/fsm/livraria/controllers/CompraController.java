@@ -1,12 +1,9 @@
 package com.fsm.livraria.controllers;
 
 import com.fsm.livraria.domain.Compra;
-import com.fsm.livraria.domain.Pais;
 import com.fsm.livraria.dto.compra.CompraCreateRequest;
 import com.fsm.livraria.dto.compra.CompraDto;
-import com.fsm.livraria.repositories.CompraRepository;
-import com.fsm.livraria.repositories.EstadoRepository;
-import com.fsm.livraria.repositories.PaisRepository;
+import com.fsm.livraria.repositories.*;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
@@ -26,15 +23,18 @@ public class CompraController {
 
     private final PaisRepository paisRepository;
 
-    public CompraController(CompraRepository compraRepository, EstadoRepository estadoRepository, PaisRepository paisRepository) {
+    private final LivroRepository livroRepository;
+
+    public CompraController(CompraRepository compraRepository, EstadoRepository estadoRepository, PaisRepository paisRepository, LivroRepository livroRepository) {
         this.compraRepository = compraRepository;
         this.estadoRepository = estadoRepository;
         this.paisRepository = paisRepository;
+        this.livroRepository = livroRepository;
     }
 
     @Post(URL)
     public HttpResponse<CompraDto> create(@Valid @Body CompraCreateRequest request) {
-        Compra compra = request.toEntity(estadoRepository, paisRepository);
+        Compra compra = request.toEntity(estadoRepository, paisRepository, livroRepository);
         compra = compraRepository.save(compra);
         return HttpResponse.created(new CompraDto(compra));
     }

@@ -11,7 +11,9 @@ import io.micronaut.data.model.Pageable;
 import io.micronaut.data.model.query.builder.sql.Dialect;
 import io.micronaut.data.repository.CrudRepository;
 
+import java.math.BigDecimal;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @JdbcRepository(dialect = Dialect.POSTGRES)
@@ -37,5 +39,10 @@ public interface LivroRepository extends CrudRepository<Livro, Long> {
         return findByUuid(uuid)
                 .orElseThrow(() -> new NotFoundError("Livro não encontrado"));
     }
+    Set<Livro> findAllByUuidIn(Set<UUID> uuids);
+
+    @Query(value = "SELECT SUM(livro_.preco) FROM Livro livro_ WHERE livro_.uuid IN (:uuids)")
+    BigDecimal TotalPrecoByLivros(Set<UUID> uuids);
+
 
 }

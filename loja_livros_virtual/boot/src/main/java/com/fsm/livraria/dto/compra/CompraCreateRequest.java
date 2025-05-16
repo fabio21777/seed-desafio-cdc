@@ -1,16 +1,20 @@
 package com.fsm.livraria.dto.compra;
 
 import com.fsm.exceptions.exception.ServiceError;
+import com.fsm.livraria.domain.Carrinho;
 import com.fsm.livraria.domain.Compra;
 import com.fsm.livraria.domain.Estado;
 import com.fsm.livraria.domain.Pais;
 import com.fsm.livraria.repositories.EstadoRepository;
+import com.fsm.livraria.repositories.LivroRepository;
 import com.fsm.livraria.repositories.PaisRepository;
 import com.fsm.livraria.validation.cpfcnpj.CPFOrCNPJ;
 import io.micronaut.serde.annotation.Serdeable;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 
 @Serdeable
@@ -55,6 +59,10 @@ public class CompraCreateRequest {
     @NotBlank
     @Pattern(regexp = "\\d{5}-\\d{3}", message = "CEP inválido")
     private String zipCode;
+
+    @NotNull(message = "O carrinho não pode ser vazio")
+    @Valid
+    private CarrinhoRequest cart;
 
     public UUID getUuid() {
         return uuid;
@@ -152,9 +160,15 @@ public class CompraCreateRequest {
         this.zipCode = zipCode;
     }
 
+    public CarrinhoRequest getCart() {
+        return cart;
+    }
 
+    public void setCart(CarrinhoRequest cart) {
+        this.cart = cart;
+    }
 
-    public Compra toEntity(EstadoRepository estadoRepository, PaisRepository paisRepository) {
+    public Compra toEntity(EstadoRepository estadoRepository, PaisRepository paisRepository, LivroRepository livroRepository) {
         // Busca o país relacionado
         Pais pais = paisRepository.findByUuidOrElseThrow(country);
         Estado estado = null;
@@ -167,9 +181,8 @@ public class CompraCreateRequest {
             estado = estadoRepository.findByUuidOrElseThrow(state);
             validarEstadoPertenceAoPais(pais, estado);
         }
-
         // Cria e retorna a nova entidade de Compra
-        return new Compra(
+        Compra compra = new Compra(
                 this.firstName,
                 this.lastName,
                 this.document,
@@ -182,6 +195,11 @@ public class CompraCreateRequest {
                 this.phone,
                 this.zipCode
         );
+
+        // Adiciona o carrinho à compra
+        compra.setCarrinho(cart.toEntity(livroRepository));
+
+        return compra;
     }
 
     /**
