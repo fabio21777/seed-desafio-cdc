@@ -54,12 +54,25 @@ class Compra {
   -String cidade <<@NotBlank>>
   -String telefone <<@NotBlank>>
   -String cep <<@NotBlank>>
+  -Carrinho carrinho <<@OneToOne(mappedBy = "compra")>>
 }
-
 note bottom of Compra
   - Estado é obrigatório apenas se o país tiver estados
   - Documento pode ser CPF ou CNPJ, validação personalizada necessária
 end note
+
+' Carrinho e CarrinhoItem
+class Carrinho {
+  -BigDecimal total
+  -Set<CarrinhoItem> items <<@OneToMany(mappedBy = "carrinho")>>
+  -Compra compra <<@OneToOne>>
+}
+
+class CarrinhoItem {
+  -long quantidade
+  -Livro livro <<@ManyToOne>>
+  -Carrinho carrinho <<@ManyToOne>>
+}
 
 ' Refresh/Auth/User entities
 class RefreshToken {
@@ -105,6 +118,8 @@ BaseDomain <|-- Autor
 BaseDomain <|-- Pais
 BaseDomain <|-- Estado
 BaseDomain <|-- Compra
+BaseDomain <|-- Carrinho
+BaseDomain <|-- CarrinhoItem
 User ..|> UserState
 
 ' Entity relationships
@@ -117,5 +132,9 @@ UserRoleId "*" -- "1" Role : references >
 Estado "*" -- "1" Pais : pertence >
 Compra "*" -- "1" Pais : pertence >
 Compra "*" -- "0..1" Estado : opcional >
+Compra "1" -- "1" Carrinho : possui >
+Carrinho "1" -- "*" CarrinhoItem : contém >
+CarrinhoItem "*" -- "1" Livro : refere >
+CarrinhoItem "*" -- "1" Carrinho : pertence >
 
 @enduml
