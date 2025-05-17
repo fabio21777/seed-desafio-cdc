@@ -15,7 +15,7 @@ public class Carrinho extends BaseDomain {
     private BigDecimal total;
 
     @Size(min = 1, message = "A quantidade no carrinho deve ser no mínimo 1")
-    @Relation(value = Relation.Kind.ONE_TO_MANY, mappedBy = "carrinho", cascade = Relation.Cascade.PERSIST)
+    @Relation(value = Relation.Kind.ONE_TO_MANY, mappedBy = "carrinho", cascade = Relation.Cascade.ALL)
     private Set<CarrinhoItem> items = new HashSet<>();
 
     @Relation(value = Relation.Kind.ONE_TO_ONE)
@@ -35,5 +35,13 @@ public class Carrinho extends BaseDomain {
 
     public void setItems(Set<CarrinhoItem> items) {
         this.items = items;
+    }
+
+    public Compra getCompra() {
+        return compra;
+    }
+
+    public void setCompra(Compra compra) {
+        this.compra = compra;
     }
 }

@@ -4,8 +4,11 @@ import com.fsm.base.model.BaseDomain;
 import io.micronaut.data.annotation.MappedEntity;
 import io.micronaut.data.annotation.Relation;
 
+import java.util.Objects;
+
 @MappedEntity
 public class CarrinhoItem extends BaseDomain {
+
     private long quantidade;
 
     @Relation(value = Relation.Kind.MANY_TO_ONE)
@@ -36,5 +39,26 @@ public class CarrinhoItem extends BaseDomain {
 
     public void setLivro(Livro livro) {
         this.livro = livro;
+    }
+
+    public Carrinho getCarrinho() {
+        return carrinho;
+    }
+
+    public void setCarrinho(Carrinho carrinho) {
+        this.carrinho = carrinho;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        CarrinhoItem that = (CarrinhoItem) o;
+        return quantidade == that.quantidade && Objects.equals(livro, that.livro) && Objects.equals(carrinho, that.carrinho);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), quantidade, livro, carrinho);
     }
 }

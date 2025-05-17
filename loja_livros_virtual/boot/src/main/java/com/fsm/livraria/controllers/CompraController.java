@@ -9,6 +9,7 @@ import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.security.annotation.Secured;
+import io.micronaut.transaction.annotation.Transactional;
 import jakarta.validation.Valid;
 
 @Controller
@@ -16,6 +17,13 @@ import jakarta.validation.Valid;
 public class CompraController {
 
     private static  final String URL = "api/v1/purchase";
+
+    public CompraController(CompraRepository compraRepository, EstadoRepository estadoRepository, PaisRepository paisRepository, LivroRepository livroRepository) {
+        this.compraRepository = compraRepository;
+        this.estadoRepository = estadoRepository;
+        this.paisRepository = paisRepository;
+        this.livroRepository = livroRepository;
+    }
 
     private final CompraRepository compraRepository;
 
@@ -25,14 +33,10 @@ public class CompraController {
 
     private final LivroRepository livroRepository;
 
-    public CompraController(CompraRepository compraRepository, EstadoRepository estadoRepository, PaisRepository paisRepository, LivroRepository livroRepository) {
-        this.compraRepository = compraRepository;
-        this.estadoRepository = estadoRepository;
-        this.paisRepository = paisRepository;
-        this.livroRepository = livroRepository;
-    }
+
 
     @Post(URL)
+    @Transactional
     public HttpResponse<CompraDto> create(@Valid @Body CompraCreateRequest request) {
         Compra compra = request.toEntity(estadoRepository, paisRepository, livroRepository);
         compra = compraRepository.save(compra);

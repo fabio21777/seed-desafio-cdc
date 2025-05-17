@@ -143,6 +143,21 @@ class CompraControllerTest {
         assertEquals(request.getCountry(), compraDto.getCountry().getUuid());
         assertEquals(request.getState(), compraDto.getState().getUuid());
 
+        //validar carrinho e itens
+
+        assertNotNull(compraDto.getCart());
+
+        assertEquals(request.getCart().getTotal(), compraDto.getCart().getTotal());
+        assertNotNull(compraDto.getCart().getItems());
+        assertEquals(request.getCart().getItems().size(), compraDto.getCart().getItems().size());
+
+        //deve ter os mesmos livros
+        livros.forEach(livro -> {
+            assertTrue(compraDto.getCart().getItems().stream()
+                    .anyMatch(item -> item.getLivro().getUuid().equals(livro.getUuid())));
+        });
+
+
     }
 
     @Test

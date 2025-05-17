@@ -13,6 +13,7 @@ CREATE TABLE compra (
     cidade VARCHAR(255) NOT NULL,
     telefone VARCHAR(20) NOT NULL,
     cep VARCHAR(20) NOT NULL,
+    status VARCHAR(64) NOT NULL,
 
     pais_id BIGINT NOT NULL,
     estado_id BIGINT,

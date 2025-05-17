@@ -4,11 +4,12 @@ import com.fsm.base.model.BaseDomain;
 import com.fsm.livraria.validation.cpfcnpj.CPFOrCNPJ;
 import io.micronaut.data.annotation.MappedEntity;
 import io.micronaut.data.annotation.Relation;
+import io.micronaut.data.annotation.TypeDef;
+import io.micronaut.data.model.DataType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import org.checkerframework.checker.regex.qual.Regex;
 
 @MappedEntity
 public class Compra extends BaseDomain {
@@ -49,14 +50,18 @@ public class Compra extends BaseDomain {
     @Pattern(regexp = "\\d{5}-\\d{3}", message = "CEP inválido")
     private String cep;
 
-    @Relation(value = Relation.Kind.ONE_TO_ONE, mappedBy = "compra", cascade = Relation.Cascade.PERSIST)
+    @Relation(value = Relation.Kind.ONE_TO_ONE, mappedBy = "compra", cascade = Relation.Cascade.ALL)
     private Carrinho carrinho;
 
+    @NotBlank
+    @TypeDef(type = DataType.STRING)
+    private CompraStatus status;
 
     public Compra() {
     }
 
-    public Compra(@NotBlank(message = "Nome não pode ser vazio") @Size(max = 100, message = "Nome não pode ter mais de 100 caracteres") String firstName, @NotBlank(message = "Sobrenome não pode ser vazio") @Size(max = 100, message = "Sobrenome não pode ter mais de 100 caracteres") String lastName, @NotBlank(message = "Nome não pode ser vazio") @Size(max = 14, message = "CPF ou CNPJ inválido") @CPFOrCNPJ(message = "CPF ou CNPJ inválido") String document, @NotBlank @Email(message = "Email inválido") String email, @NotBlank(message = "Endereço não pode ser vazio") String address, @NotBlank(message = "O complemento não pode ser vazio") String addressComplement, @NotBlank(message = "O bairro não pode ser vazio") String city, Estado byUuidOrElseThrow, Pais byUuidOrElseThrow1, @NotBlank @Size(max = 11, message = "Telefone inválido") String phone, @NotBlank String zipCode) {
+
+    public Compra(@NotBlank(message = "Nome não pode ser vazio") @Size(max = 100, message = "Nome não pode ter mais de 100 caracteres") String firstName, @NotBlank(message = "Sobrenome não pode ser vazio") @Size(max = 100, message = "Sobrenome não pode ter mais de 100 caracteres") String lastName, @NotBlank(message = "Nome não pode ser vazio") @Size(max = 14, message = "CPF ou CNPJ inválido") @CPFOrCNPJ(message = "CPF ou CNPJ inválido") String document, @NotBlank @Email(message = "Email inválido") String email, @NotBlank(message = "Endereço não pode ser vazio") String address, @NotBlank(message = "O complemento não pode ser vazio") String addressComplement, @NotBlank(message = "O bairro não pode ser vazio") String city, Estado byUuidOrElseThrow, Pais byUuidOrElseThrow1, @NotBlank @Size(max = 11, message = "Telefone inválido") String phone, @NotBlank String zipCode,  CompraStatus status) {
         this.nome = firstName;
         this.sobrenome = lastName;
         this.documento = document;
@@ -68,6 +73,7 @@ public class Compra extends BaseDomain {
         this.pais = byUuidOrElseThrow1;
         this.telefone = phone;
         this.cep = zipCode;
+        this.status = status;
     }
 
     public String getEmail() {
@@ -164,5 +170,13 @@ public class Compra extends BaseDomain {
 
     public void setCarrinho(Carrinho carrinho) {
         this.carrinho = carrinho;
+    }
+
+    public CompraStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(CompraStatus status) {
+        this.status = status;
     }
 }

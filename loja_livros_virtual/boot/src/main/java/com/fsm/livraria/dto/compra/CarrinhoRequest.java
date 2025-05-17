@@ -4,6 +4,7 @@ import com.fsm.exceptions.exception.NotFoundError;
 import com.fsm.exceptions.exception.ServiceError;
 import com.fsm.livraria.domain.Carrinho;
 import com.fsm.livraria.domain.CarrinhoItem;
+import com.fsm.livraria.domain.Compra;
 import com.fsm.livraria.domain.Livro;
 import com.fsm.livraria.repositories.LivroRepository;
 import io.micronaut.serde.annotation.Serdeable;
@@ -13,9 +14,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.math.BigDecimal;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Serdeable
@@ -53,7 +52,7 @@ public class CarrinhoRequest {
     }
 
 
-    public Carrinho toEntity(LivroRepository livroRepository) {
+    public Carrinho toEntity(LivroRepository livroRepository, Compra compra) {
         // Buscar todos os livros do carrinho de uma vez
         Set<UUID> livroIds = this.getLivrosUuids();
 
@@ -69,26 +68,23 @@ public class CarrinhoRequest {
             throw new ServiceError("O valor total do carrinho não é igual ao valor dos livros");
         }
 
-
-        // Criar os itens do carrinho usando o mapa de livros
-        Set<CarrinhoItem> carrinhoItems = this.items.stream()
-                .map(itemRequest -> {
-                    UUID livroId = itemRequest.getLivro();
-                    Livro livro = livroMap.get(livroId);
-
-                    if (livro == null) {
-                        throw new NotFoundError("Livro não encontrado com UUID: " + livroId);
-                    }
-
-                    CarrinhoItem item = itemRequest.toEntity();
-                    item.setLivro(livro);
-                    return item;
-                })
-                .collect(Collectors.toSet());
-
-        // Criar e retornar o carrinho com todos os dados
+        // Criar o carrinho primeiro
         Carrinho carrinho = new Carrinho();
         carrinho.setTotal(this.total);
+        carrinho.setCompra(compra);
+
+        // Adicionar cada item individualmente ao carrinho
+        List<CarrinhoItem> carrinhoItems = new ArrayList<>();
+        this.items.forEach(itemRequest -> {
+            UUID livroId = itemRequest.getLivro();
+            Livro livro = livroMap.get(livroId);
+
+            if (livro == null) {
+                throw new NotFoundError("Livro não encontrado com UUID: " + livroId);
+            }
+            CarrinhoItem item = itemRequest.toEntity(livro, carrinho);
+            carrinhoItems.add(item);
+        });
         carrinho.getItems().addAll(carrinhoItems);
         return carrinho;
     }

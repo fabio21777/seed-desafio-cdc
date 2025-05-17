@@ -40,6 +40,8 @@ public class CompraDto {
 
     private String zipCode;
 
+    private CarrinhoDto cart;
+
     public CompraDto() {
     }
 
@@ -56,6 +58,7 @@ public class CompraDto {
         state = new EstadoDto(compra.getEstado());
         phone = compra.getTelefone();
         zipCode = compra.getCep();
+        cart = new CarrinhoDto(compra.getCarrinho());
     }
 
     public UUID getUuid() {
@@ -152,5 +155,13 @@ public class CompraDto {
 
     public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
+    }
+
+    public CarrinhoDto getCart() {
+        return cart;
+    }
+
+    public void setCart(CarrinhoDto cart) {
+        this.cart = cart;
     }
 }

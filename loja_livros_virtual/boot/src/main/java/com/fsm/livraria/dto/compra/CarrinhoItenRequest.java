@@ -1,6 +1,8 @@
 package com.fsm.livraria.dto.compra;
 
+import com.fsm.livraria.domain.Carrinho;
 import com.fsm.livraria.domain.CarrinhoItem;
+import com.fsm.livraria.domain.Livro;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -33,9 +35,11 @@ public class CarrinhoItenRequest {
         this.quatity = quatity;
     }
 
-    public CarrinhoItem toEntity() {
+    public CarrinhoItem toEntity(Livro livro, Carrinho carrinho) {
         CarrinhoItem item = new CarrinhoItem();
         item.setQuantidade(this.quatity);
+        item.setCarrinho(carrinho);
+        item.setLivro(livro);
         return item;
     }
 }

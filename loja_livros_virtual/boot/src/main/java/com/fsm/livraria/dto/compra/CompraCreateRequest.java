@@ -1,17 +1,14 @@
 package com.fsm.livraria.dto.compra;
 
 import com.fsm.exceptions.exception.ServiceError;
-import com.fsm.livraria.domain.Carrinho;
 import com.fsm.livraria.domain.Compra;
+import com.fsm.livraria.domain.CompraStatus;
 import com.fsm.livraria.domain.Estado;
 import com.fsm.livraria.domain.Pais;
-import com.fsm.livraria.repositories.EstadoRepository;
-import com.fsm.livraria.repositories.LivroRepository;
-import com.fsm.livraria.repositories.PaisRepository;
+import com.fsm.livraria.repositories.*;
 import com.fsm.livraria.validation.cpfcnpj.CPFOrCNPJ;
 import io.micronaut.serde.annotation.Serdeable;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 import jakarta.validation.Valid;
@@ -193,11 +190,12 @@ public class CompraCreateRequest {
                 estado,
                 pais,
                 this.phone,
-                this.zipCode
+                this.zipCode,
+                CompraStatus.INICIADA
         );
 
         // Adiciona o carrinho à compra
-        compra.setCarrinho(cart.toEntity(livroRepository));
+        compra.setCarrinho(cart.toEntity(livroRepository, compra));
 
         return compra;
     }
