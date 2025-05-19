@@ -1,6 +1,5 @@
 package com.fsm.livraria.validation.cpfcnpj;
 
-import com.fsm.livraria.repositories.PaisRepository;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.validation.validator.constraints.ConstraintValidator;
 import jakarta.inject.Singleton;

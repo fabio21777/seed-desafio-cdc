@@ -1,8 +1,6 @@
 package com.fsm.exceptions.handler;
 
 import com.fsm.exceptions.exception.AcessError;
-import com.fsm.exceptions.exception.NotFoundError;
-import com.fsm.exceptions.exception.ServiceError;
 import com.fsm.exceptions.exception.StandardError;
 import com.fsm.exceptions.exception.ValidateError;
 import io.micronaut.context.annotation.Requires;

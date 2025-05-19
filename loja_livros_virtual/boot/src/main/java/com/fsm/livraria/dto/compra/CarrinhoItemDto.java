@@ -3,10 +3,6 @@ package com.fsm.livraria.dto.compra;
 import com.fsm.livraria.domain.CarrinhoItem;
 import com.fsm.livraria.dto.livro.LivroDTO;
 import io.micronaut.serde.annotation.Serdeable;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
-
-import java.util.UUID;
 
 @Serdeable
 public class CarrinhoItemDto {

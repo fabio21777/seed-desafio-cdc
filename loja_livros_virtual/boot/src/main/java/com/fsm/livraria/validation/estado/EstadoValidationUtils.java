@@ -1,10 +1,6 @@
 package com.fsm.livraria.validation.estado;
 
 import com.fsm.livraria.repositories.EstadoRepository;
-import com.fsm.livraria.repositories.PaisRepository;
-import io.micronaut.core.annotation.Nullable;
-
-import java.util.UUID;
 
 /**
  * Utility methods to ease {@link EstadoNotDuplicateName} validation.

@@ -1,16 +1,13 @@
 package com.fsm.livraria.dto.compra;
 
 import com.fsm.livraria.domain.Compra;
-import com.fsm.livraria.domain.Estado;
-import com.fsm.livraria.domain.Pais;
+import com.fsm.livraria.domain.CompraCupom;
+import com.fsm.livraria.dto.cupom.ComprarCupomDTO;
 import com.fsm.livraria.dto.paisestado.EstadoDto;
 import com.fsm.livraria.dto.paisestado.PaisDto;
-import com.fsm.livraria.validation.cpfcnpj.CPFOrCNPJ;
 import io.micronaut.serde.annotation.Serdeable;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Serdeable
@@ -42,10 +39,16 @@ public class CompraDto {
 
     private CarrinhoDto cart;
 
+    private ComprarCupomDTO coupon;
+
+    private BigDecimal totalFinal;
+
+
+
     public CompraDto() {
     }
 
-    public CompraDto(Compra compra) {
+    public CompraDto(Compra compra, CompraCupom cupom) {
         uuid = compra.getUuid();
         email = compra.getEmail();
         firstName = compra.getNome();
@@ -59,6 +62,8 @@ public class CompraDto {
         phone = compra.getTelefone();
         zipCode = compra.getCep();
         cart = new CarrinhoDto(compra.getCarrinho());
+        coupon = new ComprarCupomDTO(cupom);
+        totalFinal = compra.getValorFinal();
     }
 
     public UUID getUuid() {
@@ -163,5 +168,21 @@ public class CompraDto {
 
     public void setCart(CarrinhoDto cart) {
         this.cart = cart;
+    }
+
+    public ComprarCupomDTO getCoupon() {
+        return coupon;
+    }
+
+    public void setCoupon(ComprarCupomDTO coupon) {
+        this.coupon = coupon;
+    }
+
+    public BigDecimal getTotalFinal() {
+        return totalFinal;
+    }
+
+    public void setTotalFinal(BigDecimal totalFinal) {
+        this.totalFinal = totalFinal;
     }
 }

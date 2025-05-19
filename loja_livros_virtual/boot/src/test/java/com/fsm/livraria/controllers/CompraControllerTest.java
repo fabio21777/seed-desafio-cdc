@@ -22,7 +22,9 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.fsm.UtilsTest.CreateValorAleatorio0a100;
 import static com.fsm.UtilsTest.uuid;
+import static com.fsm.livraria.controllers.cupom.GeradorCodigoLegivel.criarCodigoLegivel;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.*;
@@ -51,6 +53,9 @@ class CompraControllerTest {
     @Inject
     CategoriaRepository categoriaRepository;
 
+    @Inject
+    CupomRepository cupomRepository;
+
     private String token;
 
     private Pais pais;
@@ -65,6 +70,10 @@ class CompraControllerTest {
 
     Categoria categoria;
 
+    Cupom cupom;
+
+    Cupom cupomInvalido;
+
     private static final String PATH = "api/v1/purchase";
 
     @BeforeEach
@@ -77,34 +86,8 @@ class CompraControllerTest {
         criarEstados();
         criarPaisSemEstados();
         criarLivros(3);
+        criarCupons();
 
-    }
-
-    private void criarLivros(int qtdLivros) {
-        //
-        this.autor = new Autor("email" + uuid() + "@teste.com.br",
-                "Nome do Autor" + uuid(),
-                "Descrição do autor");
-
-        this.autor = autorRepository.save(autor);
-
-        this.categoria = categoriaRepository.save("Categoria Teste " + uuid());
-        Livro livro = null;
-        for (int i = 0; i < qtdLivros; i++) {
-            livro = new Livro(
-                    "Java Efetivo: Programação Prática" + uuid(),
-                    "Um guia prático para as melhores práticas em Java",
-                    "# Capítulo 1\n\nIntrodução ao Java moderno\n\n# Capítulo 2\n\nBoas práticas de programação",
-                    new BigDecimal("129.90"),
-                    320,
-                    "978-8550804583" + uuid(),
-                    LocalDateTime.now().plusDays(30),
-                    categoria,
-                    autor);
-
-            livro = livroRepository.save(livro);
-            livros.add(livro);
-        }
     }
 
     @Test
@@ -157,7 +140,48 @@ class CompraControllerTest {
                     .anyMatch(item -> item.getLivro().getUuid().equals(livro.getUuid())));
         });
 
+        //validar cupom
+        assertNotNull(compraDto.getCoupon());
+        assertEquals(this.cupom.getCodigo(), compraDto.getCoupon().getCoupon().getCode());
 
+
+
+    }
+
+    @Test
+    @DisplayName("deve falhar ao criar um compra com cupom inválido")
+    void deveFalharComCupomInvalido() {
+        CompraCreateRequest request = criarRequest();
+        request.setCoupon("CUPOM_INVALIDO");
+
+        given()
+                .spec(spec)
+                .header("Authorization", "Bearer " + token)
+                .body(request)
+                .contentType("application/json")
+                .when()
+                .post(PATH)
+                .then()
+                .statusCode(404)
+                .body("message", containsString("Cupom não encontrado"));
+    }
+
+    @Test
+    @DisplayName("deve falhar ao criar um compra com cupom expirado")
+    void deveFalharComCupomExpirado() {
+        CompraCreateRequest request = criarRequest();
+        request.setCoupon(cupomInvalido.getCodigo());
+
+        given()
+                .spec(spec)
+                .header("Authorization", "Bearer " + token)
+                .body(request)
+                .contentType("application/json")
+                .when()
+                .post(PATH)
+                .then()
+                .statusCode(400)
+                .body("message", containsString("Cupom inválido, a data de validade já passou"));
     }
 
     @Test
@@ -490,6 +514,7 @@ class CompraControllerTest {
         request.setPhone("11999887766");
         request.setZipCode("01310-000");
         request.setCart(criarCarrinhoRequest());
+        request.setCoupon(this.cupom.getCodigo());
         return request;
     }
 
@@ -507,5 +532,47 @@ class CompraControllerTest {
                 })
                 .collect(Collectors.toSet()));
         return carrinho;
+    }
+
+    private void criarCupons() {
+        Cupom newCupom = new Cupom(criarCodigoLegivel(),
+                CreateValorAleatorio0a100(),
+                LocalDateTime.now().plusDays(1));
+
+        this.cupom =  cupomRepository.save(newCupom);
+
+        Cupom newCupomInvalido = new Cupom(criarCodigoLegivel(),
+                CreateValorAleatorio0a100(),
+                LocalDateTime.now().minusDays(1));
+
+        this.cupomInvalido = cupomRepository.save(newCupomInvalido);
+
+    }
+
+    private void criarLivros(int qtdLivros) {
+        //
+        this.autor = new Autor("email" + uuid() + "@teste.com.br",
+                "Nome do Autor" + uuid(),
+                "Descrição do autor");
+
+        this.autor = autorRepository.save(autor);
+
+        this.categoria = categoriaRepository.save("Categoria Teste " + uuid());
+        Livro livro = null;
+        for (int i = 0; i < qtdLivros; i++) {
+            livro = new Livro(
+                    "Java Efetivo: Programação Prática" + uuid(),
+                    "Um guia prático para as melhores práticas em Java",
+                    "# Capítulo 1\n\nIntrodução ao Java moderno\n\n# Capítulo 2\n\nBoas práticas de programação",
+                    new BigDecimal("129.90"),
+                    320,
+                    "978-8550804583" + uuid(),
+                    LocalDateTime.now().plusDays(30),
+                    categoria,
+                    autor);
+
+            livro = livroRepository.save(livro);
+            livros.add(livro);
+        }
     }
 }

@@ -1,7 +1,6 @@
 package com.fsm.security.repositories;
 
 import com.fsm.security.entities.Role;
-import com.fsm.security.entities.User;
 import com.fsm.security.entities.UserRole;
 import com.fsm.security.entities.UserRoleId;
 import io.micronaut.data.annotation.Query;

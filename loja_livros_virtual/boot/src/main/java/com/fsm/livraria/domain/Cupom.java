@@ -24,6 +24,12 @@ public class Cupom extends BaseDomain {
     public Cupom() {
     }
 
+    public Cupom(String codigo, BigDecimal percentualDesconto, LocalDateTime dataValidade) {
+        this.codigo = codigo;
+        this.percentualDesconto = percentualDesconto;
+        this.dataValidade = dataValidade;
+    }
+
     public String getCodigo() {
         return codigo;
     }
@@ -46,5 +52,9 @@ public class Cupom extends BaseDomain {
 
     public void setDataValidade(LocalDateTime dataValidade) {
         this.dataValidade = dataValidade;
+    }
+
+    public  boolean estaValido() {
+        return LocalDateTime.now().isBefore(dataValidade);
     }
 }

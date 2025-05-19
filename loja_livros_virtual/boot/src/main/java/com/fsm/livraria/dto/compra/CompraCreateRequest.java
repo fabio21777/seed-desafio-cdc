@@ -5,14 +5,15 @@ import com.fsm.livraria.domain.Compra;
 import com.fsm.livraria.domain.CompraStatus;
 import com.fsm.livraria.domain.Estado;
 import com.fsm.livraria.domain.Pais;
-import com.fsm.livraria.repositories.*;
+import com.fsm.livraria.repositories.EstadoRepository;
+import com.fsm.livraria.repositories.LivroRepository;
+import com.fsm.livraria.repositories.PaisRepository;
 import com.fsm.livraria.validation.cpfcnpj.CPFOrCNPJ;
 import io.micronaut.serde.annotation.Serdeable;
-
-import java.util.UUID;
-
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
+
+import java.util.UUID;
 
 @Serdeable
 public class CompraCreateRequest {
@@ -60,6 +61,9 @@ public class CompraCreateRequest {
     @NotNull(message = "O carrinho não pode ser vazio")
     @Valid
     private CarrinhoRequest cart;
+
+    @Size(max = 64, message = "O cupom não pode ter mais de 64 caracteres")
+    private String coupon;
 
     public UUID getUuid() {
         return uuid;
@@ -163,6 +167,14 @@ public class CompraCreateRequest {
 
     public void setCart(CarrinhoRequest cart) {
         this.cart = cart;
+    }
+
+    public String getCoupon() {
+        return coupon;
+    }
+
+    public void setCoupon(String coupon) {
+        this.coupon = coupon;
     }
 
     public Compra toEntity(EstadoRepository estadoRepository, PaisRepository paisRepository, LivroRepository livroRepository) {

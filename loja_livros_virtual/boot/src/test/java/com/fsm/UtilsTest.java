@@ -6,6 +6,7 @@ import io.restassured.specification.RequestSpecification;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
+import java.math.BigDecimal;
 import java.util.Random;
 import java.util.UUID;
 
@@ -50,5 +51,10 @@ public class UtilsTest {
             sb.append(LETTERS.charAt(index));
         }
         return sb.toString();
+    }
+
+    //valor aleatorio de 0 a 100
+    public static BigDecimal CreateValorAleatorio0a100() {
+        return BigDecimal.valueOf(Math.random() * 100 + 1);
     }
 }

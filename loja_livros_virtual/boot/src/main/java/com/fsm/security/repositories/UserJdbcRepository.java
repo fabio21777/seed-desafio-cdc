@@ -3,7 +3,6 @@ package com.fsm.security.repositories;
 import com.fsm.security.dto.UserListDTO;
 import com.fsm.security.entities.User;
 import io.micronaut.core.annotation.NonNull;
-import io.micronaut.data.annotation.Join;
 import io.micronaut.data.annotation.Query;
 import io.micronaut.data.jdbc.annotation.JdbcRepository;
 import io.micronaut.data.model.query.builder.sql.Dialect;

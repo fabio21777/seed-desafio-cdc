@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import static com.fsm.UtilsTest.CreateValorAleatorio0a100;
 import static com.fsm.livraria.controllers.cupom.GeradorCodigoLegivel.criarCodigoLegivel;
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.*;
@@ -285,10 +286,5 @@ class CupomCreateControllerTest {
                 CreateValorAleatorio0a100(),
                 LocalDateTime.now().plusDays(1)
         );
-    }
-
-    //valor aleatorio de 0 a 100
-    private BigDecimal CreateValorAleatorio0a100() {
-        return BigDecimal.valueOf(Math.random() * 100);
     }
 }

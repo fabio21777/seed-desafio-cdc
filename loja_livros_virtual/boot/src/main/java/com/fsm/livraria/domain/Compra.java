@@ -1,6 +1,7 @@
 package com.fsm.livraria.domain;
 
 import com.fsm.base.model.BaseDomain;
+import com.fsm.livraria.repositories.CompraRepository;
 import com.fsm.livraria.validation.cpfcnpj.CPFOrCNPJ;
 import io.micronaut.data.annotation.MappedEntity;
 import io.micronaut.data.annotation.Relation;
@@ -10,6 +11,8 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+
+import java.math.BigDecimal;
 
 @MappedEntity
 public class Compra extends BaseDomain {
@@ -50,12 +53,15 @@ public class Compra extends BaseDomain {
     @Pattern(regexp = "\\d{5}-\\d{3}", message = "CEP inválido")
     private String cep;
 
-    @Relation(value = Relation.Kind.ONE_TO_ONE, mappedBy = "compra", cascade = Relation.Cascade.ALL)
+    @Relation(value = Relation.Kind.ONE_TO_ONE, mappedBy = "compra", cascade = Relation.Cascade.PERSIST)
     private Carrinho carrinho;
+
 
     @NotBlank
     @TypeDef(type = DataType.STRING)
     private CompraStatus status;
+
+    private BigDecimal valorFinal;
 
     public Compra() {
     }
@@ -178,5 +184,23 @@ public class Compra extends BaseDomain {
 
     public void setStatus(CompraStatus status) {
         this.status = status;
+    }
+
+    public BigDecimal getValorFinal() {
+        return valorFinal;
+    }
+
+    public void setValorFinal(BigDecimal valorFinal) {
+        this.valorFinal = valorFinal;
+    }
+
+    public  void calcularValorFinal(CompraCupom cupom, CompraRepository compraRepository) {
+        if (cupom != null) {
+            this.valorFinal = this.carrinho.getTotal().subtract(cupom.getValorDesconto());
+        } else {
+            this.valorFinal = this.carrinho.getTotal();
+        }
+        // Atualiza o valor final na compra
+        compraRepository.save(this);
     }
 }

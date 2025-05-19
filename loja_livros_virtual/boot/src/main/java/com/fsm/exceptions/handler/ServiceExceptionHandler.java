@@ -10,7 +10,6 @@ import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.Produces;
 import io.micronaut.http.server.exceptions.ExceptionHandler;
 import jakarta.inject.Singleton;
-import jakarta.validation.ConstraintViolationException;
 
 import java.time.Instant;
 

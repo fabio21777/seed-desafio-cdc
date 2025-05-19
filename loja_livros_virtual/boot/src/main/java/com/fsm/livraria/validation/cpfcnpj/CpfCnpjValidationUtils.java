@@ -1,7 +1,5 @@
 package com.fsm.livraria.validation.cpfcnpj;
 
-import com.fsm.livraria.repositories.PaisRepository;
-
 /**
  * Utility methods to ease {@link CPFOrCNPJ} validation.
  */
