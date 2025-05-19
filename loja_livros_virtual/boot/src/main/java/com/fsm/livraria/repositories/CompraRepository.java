@@ -20,6 +20,8 @@ public interface CompraRepository  extends CrudRepository <Compra, Long> {
     @Join(value = "carrinho")
     @Join(value = "carrinho.items")
     @Join(value = "carrinho.items.livro")
+    @Join(value = "carrinho.items.livro.autor")
+    @Join(value = "carrinho.items.livro.categoria")
     Optional<Compra> findByUuid(UUID uuid);
 
 }
