@@ -42,6 +42,7 @@ public class UtilsTest {
         return UUID.randomUUID().toString();
     }
 
+
     public static String gerarSiglaAleatoria() {
         StringBuilder sb = new StringBuilder(SIGLA_LENGTH);
         for (int i = 0; i < SIGLA_LENGTH; i++) {
