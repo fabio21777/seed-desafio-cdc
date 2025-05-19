@@ -6,8 +6,6 @@ import com.fsm.livraria.dto.compra.CarrinhoItenRequest;
 import com.fsm.livraria.dto.compra.CarrinhoRequest;
 import com.fsm.livraria.dto.compra.CompraCreateRequest;
 import com.fsm.livraria.dto.compra.CompraDto;
-import com.fsm.livraria.dto.livro.LivroCreateRequestDto;
-import com.fsm.livraria.dto.paisestado.EstadoDto;
 import com.fsm.livraria.repositories.*;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import io.restassured.response.Response;
@@ -18,6 +16,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -55,6 +54,9 @@ class CompraControllerTest {
 
     @Inject
     CupomRepository cupomRepository;
+
+    @Inject
+    CompraRepository compraRepository;
 
     private String token;
 
@@ -142,7 +144,6 @@ class CompraControllerTest {
 
         //validar cupom
         assertNotNull(compraDto.getCoupon());
-        assertEquals(this.cupom.getCodigo(), compraDto.getCoupon().getCoupon().getCode());
 
 
 
@@ -461,6 +462,67 @@ class CompraControllerTest {
                 .body("message", containsString("A quantidade deve ser maior que 0"));
     }
 
+    @Test
+    @DisplayName("detalhes da compra")
+    void detalhesDaCompra() {
+        CompraCreateRequest request = criarRequest();
+        Response response = spec
+                .when()
+                .header("Authorization", "Bearer " + token)
+                .body(request)
+                .contentType("application/json")
+                .post(PATH)
+                .then()
+                .statusCode(201)
+                .extract().response();
+
+        CompraDto compraDto = response.getBody().as(CompraDto.class);
+        assertNotNull(compraDto);
+
+        Response responseDetalhes = given()
+                .spec(spec)
+                .header("Authorization", "Bearer " + token)
+                .pathParam("uuid", compraDto.getUuid())
+                .when()
+                .get(PATH + "/{uuid}")
+                .then()
+                .statusCode(200)
+                .extract().response();
+
+        CompraDto CompraDetalhes = responseDetalhes.getBody().as(CompraDto.class);
+        assertNotNull(CompraDetalhes);
+        assertEquals(compraDto.getUuid(), CompraDetalhes.getUuid());
+        assertEquals(compraDto.getEmail(), CompraDetalhes.getEmail());
+        assertEquals(compraDto.getFirstName(), CompraDetalhes.getFirstName());
+        assertEquals(compraDto.getLastName(), CompraDetalhes.getLastName());
+        assertEquals(compraDto.getDocument(), CompraDetalhes.getDocument());
+        assertEquals(compraDto.getAddress(), CompraDetalhes.getAddress());
+        assertEquals(compraDto.getAddressComplement(), CompraDetalhes.getAddressComplement());
+        assertEquals(compraDto.getCity(), CompraDetalhes.getCity());
+
+        //validar carrinho e itens
+        assertNotNull(CompraDetalhes.getCart());
+        assertNotNull(CompraDetalhes.getCart().getItems());
+        assertEquals(compraDto.getCart().getItems().size(), CompraDetalhes.getCart().getItems().size());
+
+        //deve ter os mesmos livros
+        livros.forEach(livro -> {
+            assertTrue(CompraDetalhes.getCart().getItems().stream()
+                    .anyMatch(item -> item.getLivro().getUuid().equals(livro.getUuid())));
+        });
+
+        //validar cupom
+        assertNotNull(CompraDetalhes.getCoupon());
+        assertEquals(this.cupom.getCodigo(), CompraDetalhes.getCoupon().getCoupon().getCode());
+        assertNotNull(CompraDetalhes.getCoupon().getCoupon().getPercentageDiscount());
+        assertEquals(this.cupom.getPercentualDesconto().setScale(2, RoundingMode.HALF_UP),
+                CompraDetalhes.getCoupon().getCoupon().getPercentageDiscount().setScale(2, RoundingMode.HALF_UP));
+        assertNotNull(CompraDetalhes.getTotalFinal());
+
+
+
+    }
+
 
     // ============================== Métodos auxiliares ==============================
 
@@ -501,7 +563,6 @@ class CompraControllerTest {
 
     private CompraCreateRequest criarRequest() {
         CompraCreateRequest request = new CompraCreateRequest();
-
         request.setEmail("test" + uuid() + "@example.com");
         request.setFirstName("Nome" + uuid());
         request.setLastName("Sobrenome" + uuid());

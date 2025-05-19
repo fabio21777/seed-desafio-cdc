@@ -18,6 +18,9 @@ public class CarrinhoDto {
     }
 
     public  CarrinhoDto(Carrinho carrinho) {
+        if (carrinho == null) {
+            return;
+        }
         this.total = carrinho.getTotal();
         this.items = carrinho.getItems().stream()
                 .map(CarrinhoItemDto::new)

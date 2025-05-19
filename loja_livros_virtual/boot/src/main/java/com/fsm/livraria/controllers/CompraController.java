@@ -1,20 +1,18 @@
 package com.fsm.livraria.controllers;
 
-import com.fsm.livraria.CompraCupomService;
 import com.fsm.livraria.domain.Compra;
 import com.fsm.livraria.domain.CompraCupom;
-import com.fsm.livraria.dto.compra.CompraCreateRequest;
 import com.fsm.livraria.dto.compra.CompraDto;
+import com.fsm.livraria.repositories.CompraCupomRepository;
 import com.fsm.livraria.repositories.CompraRepository;
-import com.fsm.livraria.repositories.EstadoRepository;
-import com.fsm.livraria.repositories.LivroRepository;
-import com.fsm.livraria.repositories.PaisRepository;
 import io.micronaut.http.HttpResponse;
-import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
-import io.micronaut.http.annotation.Post;
+import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.security.annotation.Secured;
-import jakarta.validation.Valid;
+
+import java.util.Optional;
+import java.util.UUID;
 
 @Controller
 @Secured("ROLE_ADMIN")
@@ -24,29 +22,24 @@ public class CompraController {
 
     private final CompraRepository compraRepository;
 
-    private final EstadoRepository estadoRepository;
+    private final CompraCupomRepository compraCupomRepository;
 
-    private final PaisRepository paisRepository;
-
-    private final LivroRepository livroRepository;
-
-    private final CompraCupomService compraCupomService;
-
-
-    public CompraController(CompraRepository compraRepository, EstadoRepository estadoRepository, PaisRepository paisRepository, LivroRepository livroRepository, CompraCupomService compraCupomService) {
+    public CompraController(CompraRepository compraRepository, CompraCupomRepository compraCupomRepository) {
         this.compraRepository = compraRepository;
-        this.estadoRepository = estadoRepository;
-        this.paisRepository = paisRepository;
-        this.livroRepository = livroRepository;
-        this.compraCupomService = compraCupomService;
+        this.compraCupomRepository = compraCupomRepository;
     }
 
 
-    @Post(URL)
-    public HttpResponse<CompraDto> create(@Valid @Body CompraCreateRequest request) {
-        Compra compra = request.toEntity(estadoRepository, paisRepository, livroRepository);
-        compra = compraRepository.save(compra);
-        CompraCupom compraCupom = compraCupomService.vincularCupom(request.getCoupon(), compra);
-        return HttpResponse.created(new CompraDto(compra,compraCupom ));
+    @Get(URL + "/{uuid}")
+    public HttpResponse<CompraDto> getCompra(@PathVariable UUID uuid) {
+        System.out.println("UUID: " + uuid);
+        Optional<Compra> compra = compraRepository.findByUuid(uuid);
+        if (compra.isEmpty()) {
+            return HttpResponse.notFound();
+        }
+        Optional<CompraCupom> compraCupom = compraCupomRepository.findByIdCompra(compra.get());
+        return HttpResponse.ok(new CompraDto(compra.get(), compraCupom.orElse(null)));
+
     }
+
 }

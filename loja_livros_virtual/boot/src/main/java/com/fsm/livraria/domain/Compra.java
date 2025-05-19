@@ -1,7 +1,6 @@
 package com.fsm.livraria.domain;
 
 import com.fsm.base.model.BaseDomain;
-import com.fsm.livraria.repositories.CompraRepository;
 import com.fsm.livraria.validation.cpfcnpj.CPFOrCNPJ;
 import io.micronaut.data.annotation.MappedEntity;
 import io.micronaut.data.annotation.Relation;
@@ -38,11 +37,9 @@ public class Compra extends BaseDomain {
     @NotBlank
     private String cidade;
 
-    @NotBlank
     @Relation(Relation.Kind.MANY_TO_ONE)
     private Pais pais;
 
-    @NotBlank
     @Relation(Relation.Kind.MANY_TO_ONE)
     private Estado estado;
 
@@ -53,7 +50,7 @@ public class Compra extends BaseDomain {
     @Pattern(regexp = "\\d{5}-\\d{3}", message = "CEP inválido")
     private String cep;
 
-    @Relation(value = Relation.Kind.ONE_TO_ONE, mappedBy = "compra", cascade = Relation.Cascade.PERSIST)
+    @Relation(value = Relation.Kind.ONE_TO_ONE, mappedBy = "compra", cascade = Relation.Cascade.ALL)
     private Carrinho carrinho;
 
 
@@ -194,13 +191,11 @@ public class Compra extends BaseDomain {
         this.valorFinal = valorFinal;
     }
 
-    public  void calcularValorFinal(CompraCupom cupom, CompraRepository compraRepository) {
+    public  void calcularValorFinal(CompraCupom cupom) {
         if (cupom != null) {
             this.valorFinal = this.carrinho.getTotal().subtract(cupom.getValorDesconto());
         } else {
             this.valorFinal = this.carrinho.getTotal();
         }
-        // Atualiza o valor final na compra
-        compraRepository.save(this);
     }
 }

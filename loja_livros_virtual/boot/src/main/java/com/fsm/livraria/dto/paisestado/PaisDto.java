@@ -17,6 +17,9 @@ public class PaisDto {
     }
 
     public PaisDto(Pais pais) {
+        if (pais == null) {
+            return;
+        }
         this.uuid = pais.getUuid();
         this.name = pais.getNome();
         this.abreviation = pais.getSigla();

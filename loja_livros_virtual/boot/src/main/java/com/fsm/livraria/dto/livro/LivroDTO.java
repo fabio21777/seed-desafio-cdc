@@ -38,6 +38,9 @@ public class LivroDTO {
     }
 
     public LivroDTO(Livro livro) {
+        if (livro == null) {
+            return;
+        }
         this.uuid = livro.getUuid();
         this.createdAt = livro.getCreatedAt();
         this.title = livro.getTitulo();

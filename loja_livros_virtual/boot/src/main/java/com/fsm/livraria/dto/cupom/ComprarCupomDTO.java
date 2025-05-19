@@ -18,6 +18,9 @@ public class ComprarCupomDTO {
     }
 
     public ComprarCupomDTO(CompraCupom compraCupom) {
+        if (compraCupom == null) {
+            return;
+        }
         this.coupon =  new CupomDto(compraCupom.getId().getCupom());
         this.discount = compraCupom.getValorDesconto();
     }

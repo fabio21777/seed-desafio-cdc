@@ -7,6 +7,7 @@ import io.micronaut.data.annotation.Id;
 import io.micronaut.data.annotation.event.PrePersist;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 public abstract class BaseDomain {
@@ -33,7 +34,7 @@ public abstract class BaseDomain {
     @Override
     public boolean equals(Object obj) {
         return (obj == this) ||
-                (obj instanceof BaseDomain && obj.getClass().equals(getClass()) && getId() == ((BaseDomain) obj).getId());
+                (obj instanceof BaseDomain && obj.getClass().equals(getClass()) && Objects.equals(getId(), ((BaseDomain) obj).getId()));
     }
 
     @Override
