@@ -36,4 +36,12 @@ public class CarrinhoItemDto {
     public void setQuatity(int quatity) {
         this.quatity = quatity;
     }
+
+    @Override
+    public String toString() {
+        return "CarrinhoItemDto{" +
+                "livro=" + livro +
+                ", quatity=" + quatity +
+                '}';
+    }
 }

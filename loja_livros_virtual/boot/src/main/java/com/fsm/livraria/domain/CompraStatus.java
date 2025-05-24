@@ -4,4 +4,5 @@ public enum CompraStatus {
     INICIADA,
     FINALIZADA,
     CANCELADA,
+    ESTOQUE_ESGOTADO
 }

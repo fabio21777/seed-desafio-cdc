@@ -42,4 +42,13 @@ public class CarrinhoDto {
     public void setItems(Set<CarrinhoItemDto> items) {
         this.items = items;
     }
+
+
+    @Override
+    public String toString() {
+        return "CarrinhoDto{" +
+                "total=" + total +
+                ", items=" + items +
+                '}';
+    }
 }

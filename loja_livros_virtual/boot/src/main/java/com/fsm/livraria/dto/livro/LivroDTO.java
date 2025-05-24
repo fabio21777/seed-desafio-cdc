@@ -141,4 +141,21 @@ public class LivroDTO {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
+
+    @Override
+    public String toString() {
+        return "LivroDTO{" +
+                "uuid=" + uuid +
+                ", createdAt=" + createdAt +
+                ", title='" + title + '\'' +
+                ", summary='" + summary + '\'' +
+                ", content='" + content + '\'' +
+                ", price=" + price +
+                ", numberOfPages=" + numberOfPages +
+                ", isbn='" + isbn + '\'' +
+                ", publicationDate=" + publicationDate +
+                ", category=" + category +
+                ", author=" + author +
+                '}';
+    }
 }

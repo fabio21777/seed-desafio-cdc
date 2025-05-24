@@ -60,4 +60,14 @@ public class CupomDto {
     public void setDateValidity(LocalDateTime dateValidity) {
         this.dateValidity = dateValidity;
     }
+
+    @Override
+    public String toString() {
+        return "CupomDto{" +
+                "uuid=" + uuid +
+                ", code='" + code + '\'' +
+                ", percentageDiscount=" + percentageDiscount +
+                ", dateValidity=" + dateValidity +
+                '}';
+    }
 }

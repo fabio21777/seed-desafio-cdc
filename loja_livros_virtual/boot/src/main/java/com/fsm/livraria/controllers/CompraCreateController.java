@@ -5,6 +5,7 @@ import com.fsm.livraria.domain.Compra;
 import com.fsm.livraria.domain.CompraCupom;
 import com.fsm.livraria.dto.compra.CompraCreateRequest;
 import com.fsm.livraria.dto.compra.CompraDto;
+import com.fsm.livraria.kafka.CompraValidateProduce;
 import com.fsm.livraria.repositories.CompraRepository;
 import com.fsm.livraria.repositories.EstadoRepository;
 import com.fsm.livraria.repositories.LivroRepository;
@@ -13,6 +14,7 @@ import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
+import io.micronaut.scheduling.annotation.Async;
 import io.micronaut.security.annotation.Secured;
 import jakarta.validation.Valid;
 
@@ -32,13 +34,16 @@ public class CompraCreateController {
 
     private final CompraCupomService compraCupomService;
 
+    private final CompraValidateProduce validateCompra;
 
-    public CompraCreateController(CompraRepository compraRepository, EstadoRepository estadoRepository, PaisRepository paisRepository, LivroRepository livroRepository, CompraCupomService compraCupomService) {
+
+    public CompraCreateController(CompraRepository compraRepository, EstadoRepository estadoRepository, PaisRepository paisRepository, LivroRepository livroRepository, CompraCupomService compraCupomService, CompraValidateProduce validateCompra) {
         this.compraRepository = compraRepository;
         this.estadoRepository = estadoRepository;
         this.paisRepository = paisRepository;
         this.livroRepository = livroRepository;
         this.compraCupomService = compraCupomService;
+        this.validateCompra = validateCompra;
     }
 
 
@@ -47,7 +52,8 @@ public class CompraCreateController {
         Compra compra = request.toEntity(estadoRepository, paisRepository, livroRepository);
         compra = compraRepository.save(compra);
         CompraCupom compraCupom = compraCupomService.vincularCupom(request.getCoupon(), compra);
-
-        return HttpResponse.created(new CompraDto(compra, compraCupom));
+        CompraDto compraDto = new CompraDto(compra, compraCupom);
+        validateCompra.validarComprar(compraDto);
+        return HttpResponse.created(compraDto);
     }
 }

@@ -38,6 +38,7 @@ public class CompraCupomService {
                 compra.calcularValorFinal(cupomNew);
                 compraCupomRepository.save(cupomNew);
                 compraRepository.update(compra);
+                return  cupomNew;
             }else {
                 throw new ServiceError("Cupom inválido, a data de validade já passou");
             }

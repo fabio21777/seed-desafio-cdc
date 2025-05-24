@@ -185,4 +185,25 @@ public class CompraDto {
     public void setTotalFinal(BigDecimal totalFinal) {
         this.totalFinal = totalFinal;
     }
+
+    @Override
+    public String toString() {
+        return "CompraDto{" +
+                "uuid=" + uuid +
+                ", email='" + email + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", document='" + document + '\'' +
+                ", address='" + address + '\'' +
+                ", addressComplement='" + addressComplement + '\'' +
+                ", city='" + city + '\'' +
+                ", country=" + country +
+                ", state=" + state +
+                ", phone='" + phone + '\'' +
+                ", zipCode='" + zipCode + '\'' +
+                ", cart=" + cart +
+                ", coupon=" + coupon +
+                ", totalFinal=" + totalFinal +
+                '}';
+    }
 }

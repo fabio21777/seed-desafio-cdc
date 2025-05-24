@@ -28,3 +28,8 @@ flyway:
   datasources:
     default:
       enabled: true
+
+#tag::kafka[]
+kafka:
+  enabled: true
+#end::kafka[]

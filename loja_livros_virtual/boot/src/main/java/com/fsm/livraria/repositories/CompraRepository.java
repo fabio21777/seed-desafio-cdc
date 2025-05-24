@@ -2,6 +2,7 @@ package com.fsm.livraria.repositories;
 
 import com.fsm.livraria.domain.Compra;
 import io.micronaut.data.annotation.Join;
+import io.micronaut.data.annotation.Query;
 import io.micronaut.data.jdbc.annotation.JdbcRepository;
 import io.micronaut.data.model.query.builder.sql.Dialect;
 import io.micronaut.data.repository.CrudRepository;
@@ -23,5 +24,8 @@ public interface CompraRepository  extends CrudRepository <Compra, Long> {
     @Join(value = "carrinho.items.livro.autor")
     @Join(value = "carrinho.items.livro.categoria")
     Optional<Compra> findByUuid(UUID uuid);
+
+    @Query("select compra.* from Compra compra where compra.uuid = (:uuid)")
+    Optional<Compra> findByUuidLazy(UUID uuid);
 
 }

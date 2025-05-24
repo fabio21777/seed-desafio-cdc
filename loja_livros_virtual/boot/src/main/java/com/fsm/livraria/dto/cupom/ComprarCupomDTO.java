@@ -41,4 +41,12 @@ public class ComprarCupomDTO {
     public void setDiscount(BigDecimal discount) {
         this.discount = discount;
     }
+
+    @Override
+    public String toString() {
+        return "ComprarCupomDTO{" +
+                "coupon=" + coupon +
+                ", discount=" + discount +
+                '}';
+    }
 }

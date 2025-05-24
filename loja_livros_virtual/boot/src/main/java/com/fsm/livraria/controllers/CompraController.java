@@ -38,7 +38,9 @@ public class CompraController {
             return HttpResponse.notFound();
         }
         Optional<CompraCupom> compraCupom = compraCupomRepository.findByIdCompra(compra.get());
-        return HttpResponse.ok(new CompraDto(compra.get(), compraCupom.orElse(null)));
+        CompraDto compraDto = new CompraDto(compra.get(), compraCupom.orElse(null));
+
+        return HttpResponse.ok(compraDto);
 
     }
 
